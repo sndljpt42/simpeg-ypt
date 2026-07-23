@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         //Jalankan Seeder yang ada di dalam array Agama.
         $this->call([
             AgamaSeeder::class,
+            PendidikanSeeder::class,
         ]);
     }
 }

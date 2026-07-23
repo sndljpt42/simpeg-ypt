@@ -14,15 +14,26 @@ class AgamaSeeder extends Seeder
     public function run(): void
     {
         // Menghapus seluruh data lama agar tidak terjadi duplikasi
-        Agama:truncate();
+        // Agama::truncate();
 
-        Agama::insert([
+        $data = [
             ['nama' => 'Islam'],
             ['nama' => 'Kristen'],
             ['nama' => 'Katolik'],
             ['nama' => 'Hindu'],
             ['nama' => 'Buddha'],
             ['nama' => 'Konghucu'],
-        ]);
+        ];
+
+        foreach($data as $item){
+            Agama::updateOrCreate(
+                // Jika sudah ada berdasarkan nama → update
+                // Jika belum ada → insert
+        
+                ['nama' => $item['nama']],
+
+                $item
+            );
+        }
     }
 }
