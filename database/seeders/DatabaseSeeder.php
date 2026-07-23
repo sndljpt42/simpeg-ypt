@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             AgamaSeeder::class,
             PendidikanSeeder::class,
             JenisPegawaiSeeder::class,
+            StatusPegawaiSeeder::class,
         ]);
     }
 }
