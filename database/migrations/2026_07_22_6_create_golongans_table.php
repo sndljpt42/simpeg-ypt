@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('golongans', function (Blueprint $table) {
             $table->id();
-            $table->string('golongan'); // III
-            $table->string('ruang'); // A
-            $table->string('kode'); // III/A
+            $table->string('golongan', 10); // III
+            $table->string('ruang', 5); // A
+            $table->string('kode', 10)->unique(); // III/A
             $table->timestamps();
         });
     }
