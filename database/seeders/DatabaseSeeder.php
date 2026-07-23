@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             StatusPegawaiSeeder::class,
             GolonganSeeder::class,
             JabatanAkademikSeeder::class,
+            UnitKerjaSeeder::class,
         ]);
     }
 }
