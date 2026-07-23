@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('status_pegawais', function (Blueprint $table) {
             $table->id();
+            //aktif, pensiun,resign,meninggal
             $table->string('nama');
             $table->timestamps();
         });

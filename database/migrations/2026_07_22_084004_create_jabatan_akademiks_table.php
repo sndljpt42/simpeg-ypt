@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('jabatan_akademiks', function (Blueprint $table) {
             $table->id();
+            // AA/L/LK/GB
+            $table->string('nama');
             $table->timestamps();
         });
     }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('jenis_pegawais', function (Blueprint $table) {
             $table->id();
+            //ec : Dosen, Tendik
             $table->string('nama');
             $table->timestamps();
         });
