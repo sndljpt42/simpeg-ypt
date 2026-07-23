@@ -36,6 +36,12 @@ class Pegawai extends Model
         return $this->belongsTo(JenisPegawai::class);
     }
 
+    //Pegawai memiliki satu pendidikan.
+    public function pendidikan(): BelongsTo
+    {
+        return $this->belongsTo(Pendidikan::class);
+    }
+
     //pegawai memiliki satu status pegawai.
     public function statusPegawai(): BelongsTo {
         return $this->belongsTo(StatusPegawai::class);
