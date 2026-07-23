@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             PendidikanSeeder::class,
             JenisPegawaiSeeder::class,
             StatusPegawaiSeeder::class,
+            GolonganSeeder::class,
         ]);
     }
 }
