@@ -14,8 +14,9 @@ class JabatanAkademikSeeder extends Seeder
      */
     public function run(): void
     {
-        //Data Master Jabatan Akademik
+        // Data Master Jabatan Akademik
         $data = [
+
             [
                 'nama'      => 'Asisten Ahli',
                 'gol_min'   => 'III/B',
@@ -47,37 +48,44 @@ class JabatanAkademikSeeder extends Seeder
                 'usia'      => 70,
                 'maks_kgb'  => null,
             ],
+
         ];
 
-        //simpan ke db
+        // Simpan ke database
+        foreach ($data as $item) {
 
-        foreach($data as $item){
-            //cari id gol min
+            // Cari golongan minimal
             $golMin = Golongan::where('kode', $item['gol_min'])->first();
-            //cari id gol max
+
+            // Cari golongan maksimal
             $golMax = Golongan::where('kode', $item['gol_max'])->first();
 
-            //jika salah satu golongan tidak ditemukan,
-            //jngan lanjutkan agar tidak error.
+            // Jika tidak ditemukan, tampilkan peringatan
+            if (!$golMin || !$golMax) {
 
-            if(!$golMin || !$golMax){
-                $this->command-warn(
+                $this->command->warn(
                     "Golongan {$item['gol_min']} atau {$item['gol_max']} belum ada."
                 );
-            };
 
-            continue;
+                continue;
+            }
+
+            // Simpan ke database
+            JabatanAkademik::updateOrCreate(
+
+                [
+                    'nama' => $item['nama']
+                ],
+
+                [
+                    'golongan_min_id' => $golMin->id,
+                    'golongan_max_id' => $golMax->id,
+                    'usia_pensiun' => $item['usia'],
+                    'maks_kgb_setelah_mentok' => $item['maks_kgb'],
+                ]
+
+            );
+
         }
-
-        JabatanAkademik::updateOrCreate(
-            ['nama' => $item['nama']],
-
-            [
-                'golongan_min_id' => $golMin->id,
-                'golongan_max_id' => $golMax->id,
-                'usia_pensiun'    => $item['usia'],
-                'maks_kgb_setelah_mentok' => $item['maks_kgb'],
-            ]
-        );
     }
 }
