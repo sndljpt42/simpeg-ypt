@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class JenisPegawai extends Model
 {
+
+    public const DOSEN = 'Dosen';
+    public const TENDIK = 'Tendik';
+
+    
     protected $fillable = [
         'nama',
     ];

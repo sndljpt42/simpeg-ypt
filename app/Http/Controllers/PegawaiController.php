@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePegawaiRequest;
+use App\Http\Requests\UpdatePegawaiRequest;
+
 
 class PegawaiController extends Controller
 {
@@ -26,7 +29,7 @@ class PegawaiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePegawaiRequest $request)
     {
         //
     }
@@ -50,7 +53,7 @@ class PegawaiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pegawai $pegawai)
+    public function update(UpdatePegawaiRequest $request, Pegawai $pegawai)
     {
         //
     }
