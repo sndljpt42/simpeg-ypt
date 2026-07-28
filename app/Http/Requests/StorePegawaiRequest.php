@@ -39,10 +39,11 @@ class StorePegawaiRequest extends FormRequest
 
             //nipy wajib dan unik
             'nipy' => [
+                'bail',
                 'required',
                 'string',
                 'max:50',
-                'unique:pegawai,nipy',
+                'unique:pegawais,nipy',
             ],
             
             //NIDN boleh kosong
@@ -114,4 +115,73 @@ class StorePegawaiRequest extends FormRequest
             ],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+
+            'nama.required' => 'Nama lengkap wajib diisi.',
+
+            'nipy.required' => 'NIPY wajib diisi.',
+
+            'nipy.unique' => 'NIPY sudah terdaftar.',
+
+            'tempat_lahir.required' => 'Tempat lahir wajib diisi.',
+
+            'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
+
+            'agama_id.required' => 'Agama wajib dipilih.',
+
+            'pendidikan_id.required' => 'Pendidikan wajib dipilih.',
+
+            'unit_kerja_id.required' => 'Unit kerja wajib dipilih.',
+
+            'status_pegawai_id.required' => 'Status pegawai wajib dipilih.',
+
+            'tmt.required' => 'TMT wajib diisi.',
+
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
+
+            'golongan_id.exists' => 'Golongan tidak valid.',
+
+            'jabatan_akademik_id.exists' => 'Jabatan akademik tidak valid.',
+
+            'golongan_id.required' => 'Golongan wajib dipilih.',
+
+            'jabatan_akademik_id.required' => 'Jabatan akademik wajib dipilih.',
+
+        ];
+    }
+
+    public function attributes(): array
+{
+    return [
+
+        'nipy' => 'NIPY',
+
+        'nama' => 'Nama Lengkap',
+
+        'tempat_lahir' => 'Tempat Lahir',
+
+        'tanggal_lahir' => 'Tanggal Lahir',
+
+        'agama_id' => 'Agama',
+
+        'pendidikan_id' => 'Pendidikan',
+
+        'unit_kerja_id' => 'Unit Kerja',
+
+        'status_pegawai_id' => 'Status Pegawai',
+
+        'tmt' => 'TMT',
+
+        'jenis_kelamin' => 'Jenis Kelamin',
+
+        'golongan_id' => 'Golongan',
+
+        'jabatan_akademik_id' => 'Jabatan Akademik',
+
+    ];
+}
+
 }
