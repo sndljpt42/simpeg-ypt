@@ -13,6 +13,7 @@ use App\Models\UnitKerja;
 use App\Models\JabatanAkademik;
 use App\Models\JenisPegawai;
 use App\Http\Requests\StorePegawaiRequest;
+use App\Http\Requests\UpdatePegawaiRequest;
 
 class DosenController extends Controller
 {
@@ -100,17 +101,47 @@ class DosenController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Pegawai $dosen): View
     {
-        //
+        // mengambil seluruh data master
+        $agamas = Agama::orderBy('nama')->get();
+        $pendidikans = Pendidikan::orderBy('nama')->get();
+        $unitkerjas = UnitKerja::orderBy('nama')->get();
+        $golongans = Golongan::orderBy('kode')->get();
+        $jabatanAkademiks = JabatanAkademik::orderBy('nama')->get();
+        $statusPegawais = StatusPegawai::orderBy('nama')->get();
+
+        $jenisPegawai = JenisPegawai::where('nama', 'Dosen')->first();  
+
+        return view('dosen.edit', compact(
+            'dosen',
+            'agamas',
+            'pendidikans',
+            'unitkerjas',
+            'golongans',
+            'jabatanAkademiks',
+            'statusPegawais',
+            'jenisPegawai'
+
+        ));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePegawaiRequest $request, Pegawai $dosen)
     {
-        //
+        //mengambil hanya data yang lolos validasi
+
+        $data = $request->validated();
+
+        //memperbaharui dosen
+        $dosen->update($data);
+
+        //kembali ke halaman daftar dosen
+        return redirect()
+            ->route('dosen.index')
+            ->with('success', 'Data dosen berhasil diperbaharui');
     }
 
     /**
