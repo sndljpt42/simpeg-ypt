@@ -23,6 +23,8 @@ class UpdatePegawaiRequest extends FormRequest
      */
     public function rules(): array
     {
+        $pegawai = $this->route('dosen') ?? $this->route('tendik');
+
         return [
             'jenis_pegawai_id' => [
                 'required',
@@ -39,8 +41,7 @@ class UpdatePegawaiRequest extends FormRequest
                 'required',
                 'string',
                 'max:50',
-
-                Rule::unique('pegawais', 'nipy')->ignore($this->route('dosen')),
+                Rule::unique('pegawais', 'nipy')->ignore($pegawai),
             ],
 
             'nidn' => [
@@ -73,6 +74,13 @@ class UpdatePegawaiRequest extends FormRequest
             'tmt' => [
                 'required',
                 'date',
+            ],
+
+            
+            //pendidikan
+            'pendidikan_id' => [
+                'required',
+                'exists:pendidikans,id'
             ],
 
             'unit_kerja_id' => [

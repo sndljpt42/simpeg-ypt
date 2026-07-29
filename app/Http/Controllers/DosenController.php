@@ -51,7 +51,7 @@ class DosenController extends Controller
         //diurutkan berdasarkan nama agar mudah dipilih
         $agamas = Agama::orderBy('nama')->get();
         $pendidikans = Pendidikan::orderBy('nama')->get();
-        $unitkerjas = UnitKerja::orderBy('nama')->get();
+        $unitKerjas = UnitKerja::orderBy('nama')->get();
         $golongans = Golongan::orderBy('kode')->get();
         $jabatanAkademiks = JabatanAkademik::orderBy('nama')->get();
         $statusPegawais = StatusPegawai::orderBy('nama')->get();
@@ -60,16 +60,16 @@ class DosenController extends Controller
         //nanri digunakan sebagai hidden input
         //agar pengguna tidak perlu memilih jenis pegawai secara manual
 
-        $jenisPegawai = JenisPegawai::where('nama', 'Dosen')->first();
+        $jenisPegawais = JenisPegawai::where('nama', 'Dosen')->first();
 
         return view('dosen.create', compact(
             'agamas',
             'pendidikans',
-            'unitkerjas',
+            'unitKerjas',
             'golongans',
             'jabatanAkademiks',
             'statusPegawais',
-            'jenisPegawai'
+            'jenisPegawais'
         ));
     }
 
@@ -118,22 +118,22 @@ class DosenController extends Controller
         // mengambil seluruh data master
         $agamas = Agama::orderBy('nama')->get();
         $pendidikans = Pendidikan::orderBy('nama')->get();
-        $unitkerjas = UnitKerja::orderBy('nama')->get();
+        $unitKerjas = UnitKerja::orderBy('nama')->get();
         $golongans = Golongan::orderBy('kode')->get();
         $jabatanAkademiks = JabatanAkademik::orderBy('nama')->get();
         $statusPegawais = StatusPegawai::orderBy('nama')->get();
 
-        $jenisPegawai = JenisPegawai::where('nama', 'Dosen')->first();  
+        $jenisPegawais = JenisPegawai::where('nama', 'Dosen')->first();  
 
         return view('dosen.edit', compact(
             'dosen',
             'agamas',
             'pendidikans',
-            'unitkerjas',
+            'unitKerjas',
             'golongans',
             'jabatanAkademiks',
             'statusPegawais',
-            'jenisPegawai'
+            'jenisPegawais'
 
         ));
     }

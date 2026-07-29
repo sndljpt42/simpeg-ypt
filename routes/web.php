@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\TendikController;
 
 Route::redirect('/', '/login');
 
@@ -23,6 +24,8 @@ Route::middleware(['auth'])->group(function () {
         ->name('profile.destroy');
 
     Route::resource('dosen', DosenController::class);
+
+    Route::resource('tendik', TendikController::class);
 });
 
 require __DIR__.'/auth.php';

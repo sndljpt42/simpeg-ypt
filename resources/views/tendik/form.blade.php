@@ -1,7 +1,7 @@
 {{-- ========================================================= --}}
 {{-- Jenis Pegawai (otomatis Dosen) --}}
 {{-- ========================================================= --}}
-<input type="hidden" name="jenis_pegawai_id" value="{{ $jenisPegawais->id }}">
+<input type="hidden" name="jenis_pegawai_id" value="{{ $jenisPegawais->id ?? $pegawai->jenis_pegawai_id }}">
 
 
 {{-- ========================================================= --}}
@@ -20,7 +20,7 @@
 
         <div class="row">
 
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label>NIPY <span class="text-danger">*</span></label>
 
@@ -36,16 +36,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>NIDN</label>
-
-                    <input type="text" name="nidn" class="form-control"
-                        value="{{ old('nidn', $pegawai->nidn ?? '') }}">
-                </div>
-            </div>
-
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label>Status Pegawai<span class="text-danger">*</span></label>
 
@@ -287,7 +278,7 @@
 
         <div class="row">
 
-            <div class="col-md-4">
+            <div class="col-md-6">
 
                 <div class="form-group">
 
@@ -315,7 +306,7 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-6">
 
                 <div class="form-group">
 
@@ -334,34 +325,6 @@
                     </select>
 
                     @error('golongan_id')
-                        <div class="text-danger small">
-                            {{ $message }}
-                        </div>
-                    @enderror
-
-                </div>
-
-            </div>
-
-            <div class="col-md-4">
-
-                <div class="form-group">
-
-                    <label>Jabatan Akademik</label>
-
-                    <select name="jabatan_akademik_id" class="form-control @error('jabatan_akademik_id') is-invalid @enderror">
-
-                        <option value="">-- Pilih Jabatan Akademik --</option>
-
-                        @foreach ($jabatanAkademiks as $jabatan)
-                            <option value="{{ $jabatan->id }}" @selected(old('jabatan_akademik_id', $pegawai->jabatan_akademik_id ?? '') == $jabatan->id)>
-                                {{ $jabatan->nama }}
-                            </option>
-                        @endforeach
-
-                    </select>
-
-                    @error('jabatan_akademik_id')
                         <div class="text-danger small">
                             {{ $message }}
                         </div>

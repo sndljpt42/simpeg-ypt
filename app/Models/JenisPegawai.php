@@ -9,7 +9,7 @@ class JenisPegawai extends Model
 {
 
     public const DOSEN = 'Dosen';
-    public const TENDIK = 'Tendik';
+    public const TENDIK = 'Tenaga Kependidikan';
 
     
     protected $fillable = [

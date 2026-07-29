@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Data Dosen')
+@section('title', 'Data Tenaga Kependidikan')
 
 @section('content_header')
-    <h1>Data Dosen</h1>
+    <h1>Data Tenaga Kependidikan</h1>
 @stop
 
 @section('content')
@@ -11,8 +11,8 @@
     <div class="card">
         <div class="card-body">
 
-            <a href="{{ route('dosen.create') }}" class="btn btn-primary mb-3">
-                <i class="fas fa-plus"></i> Tambah Dosen
+            <a href="{{ route('tendik.create') }}" class="btn btn-primary mb-3">
+                <i class="fas fa-plus"></i> Tambah Tendik
             </a>
 
             @if (session('success'))
@@ -36,7 +36,6 @@
                         <th>Nama</th>
                         <th>Pendidikan</th>
                         <th>Golongan</th>
-                        <th>JAD</th>
                         <th>Unit Kerja</th>
                         <th width="140" class="text-center">Aksi</th>
                     </tr>
@@ -44,37 +43,35 @@
 
                 <tbody>
 
-                    @forelse($dosens as $dosen)
+                    @forelse($tendiks as $tendik)
                         <tr>
 
                             <td>{{ $loop->iteration }}</td>
 
-                            <td>{{ $dosen->nipy }}</td>
+                            <td>{{ $tendik->nipy }}</td>
 
-                            <td>{{ $dosen->nama }}</td>
+                            <td>{{ $tendik->nama }}</td>
 
-                            <td>{{ $dosen->pendidikan?->nama }}</td>
+                            <td>{{ $tendik->pendidikan?->nama }}</td>
 
-                            <td>{{ $dosen->golongan?->kode }}</td>
+                            <td>{{ $tendik->golongan?->kode }}</td>
 
-                            <td>{{ $dosen->jabatanAkademik?->nama }}</td>
-
-                            <td>{{ $dosen->unitKerja?->nama }}</td>
+                            <td>{{ $tendik->unitKerja?->nama }}</td>
 
                             <td class="text-center">
 
                                 {{-- Tombol Detail --}}
-                                <a href="{{ route('dosen.show', $dosen) }}" class="btn btn-info btn-sm" title="Detail">
+                                <a href="{{ route('tendik.show', $tendik) }}" class="btn btn-info btn-sm" title="Detail">
                                     <i class="fas fa-eye"></i>
                                 </a>
 
                                 {{-- Tombol Edit --}}
-                                <a href="{{ route('dosen.edit', $dosen) }}" class="btn btn-warning btn-sm" title="Edit">
+                                <a href="{{ route('tendik.edit', $tendik) }}" class="btn btn-warning btn-sm" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
                                 {{-- Tombol Hapus --}}
-                                <form action="{{ route('dosen.destroy', $dosen) }}" method="POST"
+                                <form action="{{ route('tendik.destroy', $tendik) }}" method="POST"
                                     style="display:inline-block"
                                     onsubmit="return confirm('Yakin ingin menghapus data ini?')">
 
@@ -96,7 +93,7 @@
 
                             <td colspan="6" class="text-center">
 
-                                Belum ada data dosen.
+                                Belum ada data tendik.
 
                             </td>
 
