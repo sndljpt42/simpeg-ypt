@@ -27,7 +27,7 @@ class DosenController extends Controller
         $dosens = Pegawai::with([
             'agama',
             'pendidikan',
-            'unitkerja',
+            'unitKerja',
             'golongan',
             'jabatanAkademik',
             'statusPegawai',
@@ -93,9 +93,21 @@ class DosenController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Pegawai $dosen): View
     {
-        //
+        //Supaya nanti tidak terjadi N+1 Query
+        //Dengan load(), semua relasi diambil di awal sehingga halaman lebih efisien.
+        $dosen->load([
+            'agama',
+            'pendidikan',
+            'unitKerja',
+            'statusPegawai',
+            'golongan',
+            'jabatanAkademik',
+            'jenisPegawai'
+        ]);
+
+        return view('dosen.show', compact('dosen'));
     }
 
     /**
