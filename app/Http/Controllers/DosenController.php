@@ -9,11 +9,12 @@ use App\Models\Agama;
 use App\Models\Golongan;
 use App\Models\Pendidikan;
 use App\Models\StatusPegawai;
-use App\Models\UnitKerja;  
+use App\Models\UnitKerja;
 use App\Models\JabatanAkademik;
 use App\Models\JenisPegawai;
 use App\Http\Requests\StorePegawaiRequest;
 use App\Http\Requests\UpdatePegawaiRequest;
+use App\Services\PegawaiFormService;
 
 class DosenController extends Controller
 {
@@ -33,13 +34,20 @@ class DosenController extends Controller
             'statusPegawai',
             'jenisPegawai',
         ])
-        ->dosen()
-        ->orderBy('nama')
-        ->get();
+            ->dosen()
+            ->orderBy('nama')
+            ->get();
 
         //mengirim data dosen kehalaman index dosen
 
         return view('dosen.index', compact('dosens'));
+    }
+
+    private PegawaiFormService $pegawaiFormService;
+
+    public function __construct(PegawaiFormService $pegawaiFormService)
+    {
+        $this->pegawaiFormService = $pegawaiFormService;
     }
 
     /**
@@ -47,29 +55,17 @@ class DosenController extends Controller
      */
     public function create(): View
     {
-        //mengambil seluruh data master untuk dropdown
-        //diurutkan berdasarkan nama agar mudah dipilih
-        $agamas = Agama::orderBy('nama')->get();
-        $pendidikans = Pendidikan::orderBy('nama')->get();
-        $unitKerjas = UnitKerja::orderBy('nama')->get();
-        $golongans = Golongan::orderBy('kode')->get();
-        $jabatanAkademiks = JabatanAkademik::orderBy('nama')->get();
-        $statusPegawais = StatusPegawai::orderBy('nama')->get();
-
         //mengambil ID jenis pegawai "Dosen"
         //nanri digunakan sebagai hidden input
         //agar pengguna tidak perlu memilih jenis pegawai secara manual
 
-        $jenisPegawais = JenisPegawai::where('nama', 'Dosen')->first();
+        $jenisPegawais = JenisPegawai::where('nama', JenisPegawai::DOSEN)->first();
 
-        return view('dosen.create', compact(
-            'agamas',
-            'pendidikans',
-            'unitKerjas',
-            'golongans',
-            'jabatanAkademiks',
-            'statusPegawais',
-            'jenisPegawais'
+        return view('dosen.create', array_merge(
+            $this->pegawaiFormService->getMasterData(),
+            [
+                'jenisPegawais' => $jenisPegawais,
+            ]
         ));
     }
 
@@ -82,10 +78,10 @@ class DosenController extends Controller
         //validate hanya mengembalikan data yang lolos validasi, sehingga aman untuk langsung disimpan ke database
         $data = $request->validated();
 
-       // menyimpan ke tabel pegawai
-       Pegawai::create($data);
+        // menyimpan ke tabel pegawai
+        Pegawai::create($data);
 
-       return redirect()
+        return redirect()
             ->route('dosen.index')
             ->with('success', 'Data Dosen Berhasil Ditambahkan');
     }
@@ -115,26 +111,14 @@ class DosenController extends Controller
      */
     public function edit(Pegawai $dosen): View
     {
-        // mengambil seluruh data master
-        $agamas = Agama::orderBy('nama')->get();
-        $pendidikans = Pendidikan::orderBy('nama')->get();
-        $unitKerjas = UnitKerja::orderBy('nama')->get();
-        $golongans = Golongan::orderBy('kode')->get();
-        $jabatanAkademiks = JabatanAkademik::orderBy('nama')->get();
-        $statusPegawais = StatusPegawai::orderBy('nama')->get();
+        $jenisPegawais = JenisPegawai::where('nama', JenisPegawai::DOSEN)->first();
 
-        $jenisPegawais = JenisPegawai::where('nama', 'Dosen')->first();  
-
-        return view('dosen.edit', compact(
-            'dosen',
-            'agamas',
-            'pendidikans',
-            'unitKerjas',
-            'golongans',
-            'jabatanAkademiks',
-            'statusPegawais',
-            'jenisPegawais'
-
+        return view('dosen.edit', array_merge(
+            $this->pegawaiFormService->getMasterData(),
+            [
+                'dosen' => $dosen,
+                'jenisPegawais' => $jenisPegawais,
+            ]
         ));
     }
 
