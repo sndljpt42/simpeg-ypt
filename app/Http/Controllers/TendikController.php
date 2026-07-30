@@ -4,15 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePegawaiRequest;
 use App\Http\Requests\UpdatePegawaiRequest;
-use Illuminate\Http\Request;
 use App\Models\Pegawai;
-use App\Models\Agama;
-use App\Models\Pendidikan;
-use App\Models\UnitKerja;
-use App\Models\Golongan;
-use App\Models\StatusPegawai;
 use App\Models\JenisPegawai;
 use Illuminate\View\View;
+use App\Services\PegawaiFormService;
 
 class TendikController extends Controller
 {
@@ -33,28 +28,25 @@ class TendikController extends Controller
         return view('tendik.index', compact('tendiks'));
     }
 
+    private PegawaiFormService $pegawaiFormService;
+
+    public function __construct(PegawaiFormService $pegawaiFormService)
+    {
+        $this->pegawaiFormService = $pegawaiFormService;
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //mengambil seluruh data master untuk dropdown
-        $agamas = Agama::orderBy('nama')->get();
-        $pendidikans = Pendidikan::orderBy('nama')->get();
-        $unitKerjas = UnitKerja::orderBy('nama')->get();
-        $golongans = Golongan::orderBy('kode')->get();
-        $statusPegawais = StatusPegawai::orderBy('nama')->get();
+        $jenisPegawais = JenisPegawai::where('nama', JenisPegawai::TENDIK)->first();
 
-        //mengambil ID jenis Pegawai
-        $jenisPegawais = JenisPegawai::where('nama', 'Tenaga Kependidikan')->first();
-
-        return view('tendik.create', compact(
-            'agamas',
-            'pendidikans',
-            'unitKerjas',
-            'golongans',
-            'statusPegawais',
-            'jenisPegawais'
+        return view('tendik.create', array_merge(
+            $this->pegawaiFormService->getMasterData(),
+            [
+                'jenisPegawais' => $jenisPegawais,
+            ]
         ));
     }
 
@@ -95,20 +87,11 @@ class TendikController extends Controller
      */
     public function edit(Pegawai $tendik): View
     {
-        //mengambil data master untuk dropdown
-        $agamas = Agama::orderBy('nama')->get();
-        $pendidikans = Pendidikan::orderBy('nama')->get();
-        $unitKerjas = UnitKerja::orderBy('nama')->get();
-        $golongans = Golongan::orderBy('kode')->get();
-        $statusPegawais = StatusPegawai::orderBy('nama')->get();
-
-        return view('tendik.edit', compact(
-            'tendik',
-            'agamas',
-            'pendidikans',
-            'unitKerjas',
-            'golongans',
-            'statusPegawais'
+        return view('tendik.edit', array_merge(
+            $this->pegawaiFormService->getMasterData(),
+            [
+                'tendik' => $tendik,
+            ]
         ));
     }
 

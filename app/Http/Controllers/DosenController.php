@@ -2,15 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\Pegawai;
-use App\Models\Agama;
-use App\Models\Golongan;
-use App\Models\Pendidikan;
-use App\Models\StatusPegawai;
-use App\Models\UnitKerja;
-use App\Models\JabatanAkademik;
 use App\Models\JenisPegawai;
 use App\Http\Requests\StorePegawaiRequest;
 use App\Http\Requests\UpdatePegawaiRequest;
