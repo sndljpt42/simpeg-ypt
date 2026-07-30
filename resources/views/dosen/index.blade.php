@@ -139,27 +139,131 @@
                 buttons: [
 
                     {
-                        extend: 'copy',
+                        extend: 'copyHtml5',
+
                         text: '<i class="fas fa-copy"></i> Copy',
-                        className: 'btn btn-secondary btn-sm'
+
+                        className: 'btn btn-secondary btn-sm',
+
+                        title: 'Laporan Data Dosen',
+
+                        exportOptions: {
+
+                            columns: [0, 1, 2, 3, 4, 5, 6],
+
+                            format: {
+
+                                body: function(data, row, column) {
+
+                                    if (column === 0) {
+                                        return row + 1;
+                                    }
+
+                                    return data;
+
+                                }
+
+                            }
+
+                        }
                     },
 
                     {
-                        extend: 'excel',
+                        extend: 'excelHtml5',
+
                         text: '<i class="fas fa-file-excel"></i> Excel',
-                        className: 'btn btn-success btn-sm'
+
+                        className: 'btn btn-success btn-sm',
+
+                        title: 'Laporan Data Dosen',
+
+                        filename: 'Data_Dosen',
+
+                        exportOptions: {
+
+                            columns: [0, 1, 2, 3, 4, 5, 6],
+
+                            format: {
+
+                                body: function(data, row, column, node) {
+
+                                    if (column === 0) {
+                                        return row + 1;
+                                    }
+
+                                    return data;
+                                }
+
+                            }
+
+                        }
                     },
 
                     {
-                        extend: 'pdf',
+                        extend: 'pdfHtml5',
+
                         text: '<i class="fas fa-file-pdf"></i> PDF',
-                        className: 'btn btn-danger btn-sm'
+
+                        className: 'btn btn-danger btn-sm',
+
+                        title: 'Laporan Data Dosen',
+
+                        filename: 'Data_Dosen',
+
+                        orientation: 'landscape',
+
+                        pageSize: 'A4',
+
+                        exportOptions: {
+
+                            columns: [0, 1, 2, 3, 4, 5, 6],
+
+                            format: {
+
+                                body: function(data, row, column) {
+
+                                    if (column === 0) {
+                                        return row + 1;
+                                    }
+
+                                    return data;
+
+                                }
+
+                            }
+
+                        }
+
                     },
 
                     {
                         extend: 'print',
+
                         text: '<i class="fas fa-print"></i> Print',
-                        className: 'btn btn-info btn-sm'
+
+                        className: 'btn btn-info btn-sm',
+
+                        title: 'Laporan Data Dosen',
+
+                        exportOptions: {
+
+                            columns: [0, 1, 2, 3, 4, 5, 6],
+
+                            format: {
+
+                                body: function(data, row, column) {
+
+                                    if (column === 0) {
+                                        return row + 1;
+                                    }
+
+                                    return data;
+
+                                }
+
+                            }
+
+                        }
                     }
 
                 ],
