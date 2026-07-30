@@ -444,7 +444,7 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -461,6 +461,64 @@ return [
                     'asset' => false,
                     'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
                 ],
+
+                //DataTables Buttons (Export Excel, PDF, Print, Copy).
+                [
+                    //Mengubah tampilan tombol agar mengikuti gaya Bootstrap/AdminLTE.
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/buttons/1.6.5/css/buttons.bootstrap4.min.css',
+                ],
+
+                [
+                    //plugin utama Buttons.Tanpa ini tidak akan ada tombol Export.
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js',
+                ],
+
+                [
+                    //Menghubungkan plugin Buttons dengan Bootstrap 4.
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/buttons/1.6.5/js/buttons.bootstrap4.min.js',
+                ],
+
+                [
+                    //Digunakan saat pengguna menekan: excel
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js',
+                ],
+
+                [
+                    //Digunakan ketika membuat PDF.
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js',
+                ],
+
+                [
+                    //Berisi font yang diperlukan PDF
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js',
+                ],
+
+                [
+                    //Mengaktifkan tombol: copy, excel, csv, pdf
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js',
+                ],
+
+                [
+                    //Mengaktifkan tombol Print.
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js',
+                ],
+
             ],
         ],
         'Select2' => [

@@ -27,11 +27,11 @@
                 </div>
             @endif
 
-            <table class="table table-bordered table-striped">
+            <table id="table-dosen" class="table table-bordered table-striped">
 
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th width="60">No</th>
                         <th>NIPY</th>
                         <th>Nama</th>
                         <th>Pendidikan</th>
@@ -47,7 +47,7 @@
                     @forelse($dosens as $dosen)
                         <tr>
 
-                            <td>{{ $loop->iteration }}</td>
+                            <td></td>
 
                             <td>{{ $dosen->nipy }}</td>
 
@@ -94,7 +94,7 @@
 
                         <tr>
 
-                            <td colspan="6" class="text-center">
+                            <td colspan="8" class="text-center">
 
                                 Belum ada data dosen.
 
@@ -111,3 +111,88 @@
     </div>
 
 @stop
+
+@section('plugins.Datatables', true);
+@push('js')
+    <script>
+        $(function() {
+
+            let table = $('#table-dosen').DataTable({
+
+                responsive: true,
+
+                autoWidth: false,
+
+                pageLength: 10,
+
+                lengthChange: true,
+
+                searching: true,
+
+                ordering: true,
+
+                info: true,
+
+                //B = Buttons f = Filter (Search) r = Processing t = Table i = Information p = Pagination
+                dom: 'Bfrtip',
+
+                buttons: [
+
+                    {
+                        extend: 'copy',
+                        text: '<i class="fas fa-copy"></i> Copy',
+                        className: 'btn btn-secondary btn-sm'
+                    },
+
+                    {
+                        extend: 'excel',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        className: 'btn btn-success btn-sm'
+                    },
+
+                    {
+                        extend: 'pdf',
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        className: 'btn btn-danger btn-sm'
+                    },
+
+                    {
+                        extend: 'print',
+                        text: '<i class="fas fa-print"></i> Print',
+                        className: 'btn btn-info btn-sm'
+                    }
+
+                ],
+
+                language: {
+
+                    url: '//cdn.datatables.net/plug-ins/1.10.19/i18n/Indonesian.json'
+
+                },
+
+                search: {
+                    smart: false
+                }
+
+            });
+
+            table.on('order.dt search.dt draw.dt', function() {
+
+                let i = 1;
+
+                table.column(0, {
+                    search: 'applied',
+                    order: 'applied'
+                }).nodes().each(function(cell) {
+
+                    cell.innerHTML = i++;
+
+                });
+
+            }).draw();
+
+
+
+        });
+    </script>
+@endpush
