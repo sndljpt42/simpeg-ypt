@@ -27,11 +27,11 @@
                 </div>
             @endif
 
-            <table class="table table-bordered table-striped">
+            <table id="table-tendik" class="table table-bordered table-striped">
 
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th width="60">No</th>
                         <th>NIPY</th>
                         <th>Nama</th>
                         <th>Pendidikan</th>
@@ -46,7 +46,7 @@
                     @forelse($tendiks as $tendik)
                         <tr>
 
-                            <td>{{ $loop->iteration }}</td>
+                            <td></td>
 
                             <td>{{ $tendik->nipy }}</td>
 
@@ -108,3 +108,195 @@
     </div>
 
 @stop
+@section('plugins.Datatables', true)
+
+@push('js')
+    <script>
+        $(function() {
+
+            let table = $('#table-tendik').DataTable({
+
+                responsive: true,
+
+                autoWidth: false,
+
+                pageLength: 10,
+
+                lengthChange: true,
+
+                searching: true,
+
+                ordering: true,
+
+                info: true,
+
+                dom: 'Bfrtip',
+
+                buttons: [
+
+                    {
+                        extend: 'copyHtml5',
+
+                        text: '<i class="fas fa-copy"></i> Copy',
+
+                        className: 'btn btn-secondary btn-sm',
+
+                        title: 'Laporan Data Tenaga Kependidikan',
+
+                        exportOptions: {
+
+                            columns: [0, 1, 2, 3, 4, 5],
+
+                            format: {
+
+                                body: function(data, row, column) {
+
+                                    if (column === 0) {
+                                        return row + 1;
+                                    }
+
+                                    return data;
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+                    {
+                        extend: 'excelHtml5',
+
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+
+                        className: 'btn btn-success btn-sm',
+
+                        title: 'Laporan Data Tenaga Kependidikan',
+
+                        filename: 'Data_Tenaga_Kependidikan',
+
+                        exportOptions: {
+
+                            columns: [0, 1, 2, 3, 4, 5],
+
+                            format: {
+
+                                body: function(data, row, column) {
+
+                                    if (column === 0) {
+                                        return row + 1;
+                                    }
+
+                                    return data;
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+                    {
+                        extend: 'pdfHtml5',
+
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+
+                        className: 'btn btn-danger btn-sm',
+
+                        title: 'Laporan Data Tenaga Kependidikan',
+
+                        filename: 'Data_Tenaga_Kependidikan',
+
+                        orientation: 'landscape',
+
+                        pageSize: 'A4',
+
+                        exportOptions: {
+
+                            columns: [0, 1, 2, 3, 4, 5],
+
+                            format: {
+
+                                body: function(data, row, column) {
+
+                                    if (column === 0) {
+                                        return row + 1;
+                                    }
+
+                                    return data;
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+                    {
+                        extend: 'print',
+
+                        text: '<i class="fas fa-print"></i> Print',
+
+                        className: 'btn btn-info btn-sm',
+
+                        title: 'Laporan Data Tenaga Kependidikan',
+
+                        exportOptions: {
+
+                            columns: [0, 1, 2, 3, 4, 5],
+
+                            format: {
+
+                                body: function(data, row, column) {
+
+                                    if (column === 0) {
+                                        return row + 1;
+                                    }
+
+                                    return data;
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                ],
+
+                language: {
+
+                    url: '//cdn.datatables.net/plug-ins/1.10.19/i18n/Indonesian.json'
+
+                },
+                search: {
+                    smart: false
+                }
+
+            });
+            //no urut selalu diperbaharui
+            table.on('order.dt search.dt draw.dt', function() {
+
+                let i = 1;
+
+                table.column(0, {
+
+                    search: 'applied',
+
+                    order: 'applied'
+
+                }).nodes().each(function(cell) {
+
+                    cell.innerHTML = i++;
+
+                });
+
+            }).draw();
+
+        });
+    </script>
+@endpush
