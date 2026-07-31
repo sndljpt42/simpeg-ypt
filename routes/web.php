@@ -22,10 +22,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
+ 
+    Route::get('/dosen/trash', [DosenController::class, 'trash'])->name('dosen.trash');
+
+    Route::patch('/dosen/{id}/restore', [DosenController::class, 'restore'])->name('dosen.restore');
 
     Route::resource('dosen', DosenController::class);
 
     Route::resource('tendik', TendikController::class);
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

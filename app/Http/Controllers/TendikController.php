@@ -113,8 +113,12 @@ class TendikController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Pegawai $tendik)
     {
-        //
+        $tendik->delete();
+
+        return redirect()
+        ->route('tendik.index')
+        ->with('success', 'Data tenaga kependidikan berhasil dihapus');
     }
 }

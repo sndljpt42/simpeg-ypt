@@ -8,6 +8,9 @@ use App\Models\JenisPegawai;
 use App\Http\Requests\StorePegawaiRequest;
 use App\Http\Requests\UpdatePegawaiRequest;
 use App\Services\PegawaiFormService;
+use Illuminate\Support\Facades\Redirect;
+use PhpParser\Builder\Function_;
+use PhpParser\Node\Expr\FuncCall;
 
 class DosenController extends Controller
 {
@@ -136,8 +139,39 @@ class DosenController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Pegawai $dosen)
     {
-        //
+        $dosen->delete();
+
+        return redirect()
+            ->route('dosen.index')
+            ->with('success', 'Data dosen berhasil dihapus');
+    }
+
+    public function trash(): View
+    {   //Mengambil hanya data yang sudah di-soft delete.
+        $dosens = Pegawai::with([
+            'pendidikan',
+            'golongan',
+            'jabatanAkademik',
+            'unitKerja'
+        ])
+            ->onlyTrashed()
+            ->dosen()
+            ->orderBy('nama')
+            ->get();
+
+        return view('dosen.trash', compact('dosens'));
+    }
+
+    public function restore($id)
+    {
+        $dosen = Pegawai::onlyTrashed()->findOrFail($id);
+
+        $dosen->restore();
+
+        return redirect()
+            ->route('dosen.trash')
+            ->with('success', 'Data dosen berhasil dipulihkan.');
     }
 }

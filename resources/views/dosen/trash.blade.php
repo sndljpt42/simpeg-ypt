@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Data Dosen')
+@section('title', 'Data Dosen Terhapus')
 
 @section('content_header')
-    <h1>Data Dosen</h1>
+    <h1>Data Dosen Terhapus</h1>
 @stop
 
 @section('content')
@@ -11,15 +11,6 @@
     <div class="card">
         <div class="card-body">
 
-            <a href="{{ route('dosen.create') }}" class="btn btn-primary mb-3">
-                <i class="fas fa-plus"></i> Tambah Dosen
-            </a>
-
-            <a href="{{ route('dosen.trash') }}" class="btn btn-secondary mb-3">
-                <i class="fas fa-trash-restore"></i>
-                Data Terhapus
-            </a>
-            
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show">
                     {{ session('success') }}
@@ -68,30 +59,20 @@
 
                             <td class="text-center">
 
-                                {{-- Tombol Detail --}}
-                                <a href="{{ route('dosen.show', $dosen) }}" class="btn btn-info btn-sm" title="Detail">
-                                    <i class="fas fa-eye"></i>
-                                </a>
+<form action="{{ route('dosen.restore', $dosen->id) }}"
+      method="POST"
+      style="display:inline"
+      onsubmit="return confirm('Yakin ingin memulihkan data ini?')">
 
-                                {{-- Tombol Edit --}}
-                                <a href="{{ route('dosen.edit', $dosen) }}" class="btn btn-warning btn-sm" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+    @csrf
+    @method('PATCH')
 
-                                {{-- Tombol Hapus --}}
-                                <form action="{{ route('dosen.destroy', $dosen) }}" method="POST"
-                                    style="display:inline-block"
-                                    onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+    <button type="submit" class="btn btn-success btn-sm">
+        <i class="fas fa-trash-restore"></i>
+        Restore
+    </button>
 
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button class="btn btn-danger btn-sm" title="Hapus">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-
-                                </form>
-
+</form>
                             </td>
                         </tr>
 
