@@ -59,20 +59,32 @@
 
                             <td class="text-center">
 
-<form action="{{ route('dosen.restore', $dosen->id) }}"
-      method="POST"
-      style="display:inline"
-      onsubmit="return confirm('Yakin ingin memulihkan data ini?')">
+                                <form action="{{ route('dosen.restore', $dosen->id) }}" method="POST"
+                                    style="display:inline" onsubmit="return confirm('Yakin ingin memulihkan data ini?')">
 
-    @csrf
-    @method('PATCH')
+                                    @csrf
+                                    @method('PATCH')
 
-    <button type="submit" class="btn btn-success btn-sm">
-        <i class="fas fa-trash-restore"></i>
-        Restore
-    </button>
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fas fa-trash-restore"></i>
+                                        Restore
+                                    </button>
 
-</form>
+                                </form>
+
+                                <form action="{{ route('dosen.forceDelete', $dosen->id) }}" method="POST"
+                                    style="display:inline"
+                                    onsubmit="return confirm('PERINGATAN !!! Data ini akan dihapus permanen, apakah anda yakin ingin menghapus data ini?')">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                        Hapus Permanen
+                                    </button>
+
+                                </form>
                             </td>
                         </tr>
 
@@ -98,7 +110,7 @@
 
 @stop
 
-@section('plugins.Datatables', true);
+@section('plugins.Datatables', true)
 @push('js')
     <script>
         $(function() {

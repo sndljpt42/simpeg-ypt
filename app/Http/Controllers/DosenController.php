@@ -8,9 +8,7 @@ use App\Models\JenisPegawai;
 use App\Http\Requests\StorePegawaiRequest;
 use App\Http\Requests\UpdatePegawaiRequest;
 use App\Services\PegawaiFormService;
-use Illuminate\Support\Facades\Redirect;
-use PhpParser\Builder\Function_;
-use PhpParser\Node\Expr\FuncCall;
+
 
 class DosenController extends Controller
 {
@@ -141,8 +139,10 @@ class DosenController extends Controller
      */
     public function destroy(Pegawai $dosen)
     {
+        //menghapus dosen
         $dosen->delete();
 
+        //kembali ke halaman daftar dosen
         return redirect()
             ->route('dosen.index')
             ->with('success', 'Data dosen berhasil dihapus');
@@ -173,5 +173,15 @@ class DosenController extends Controller
         return redirect()
             ->route('dosen.trash')
             ->with('success', 'Data dosen berhasil dipulihkan.');
+    }
+
+    public function forceDelete($id){
+        //mengambil hanya data dosen yang sudah di soft delete
+        $dosen = Pegawai::onlyTrashed()->findOrFail($id);
+        $dosen->forceDelete();
+
+        return redirect()
+            ->route('dosen.trash')
+            ->with('success', 'Data dosen berhasil dihapus permanen.');
     }
 }

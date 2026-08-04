@@ -22,10 +22,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
- 
+
     Route::get('/dosen/trash', [DosenController::class, 'trash'])->name('dosen.trash');
 
     Route::patch('/dosen/{id}/restore', [DosenController::class, 'restore'])->name('dosen.restore');
+
+    Route::delete('/dosen/{id}/force-delete', [DosenController::class, 'forceDelete'])
+        ->name('dosen.forceDelete');
 
     Route::resource('dosen', DosenController::class);
 

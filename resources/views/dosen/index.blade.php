@@ -117,7 +117,7 @@
 
 @stop
 
-@section('plugins.Datatables', true);
+@section('plugins.Datatables', true)
 @push('js')
     <script>
         $(function() {
