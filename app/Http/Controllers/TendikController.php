@@ -7,10 +7,12 @@ use App\Http\Requests\UpdatePegawaiRequest;
 use App\Models\Pegawai;
 use App\Models\JenisPegawai;
 use Illuminate\View\View;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Services\PegawaiFormService;
 
 class TendikController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -118,7 +120,49 @@ class TendikController extends Controller
         $tendik->delete();
 
         return redirect()
-        ->route('tendik.index')
-        ->with('success', 'Data tenaga kependidikan berhasil dihapus');
+            ->route('tendik.index')
+            ->with('success', 'Data tenaga kependidikan berhasil dihapus');
+    }
+
+    public function trash()
+    {
+        //onlyTrashed() untuk mengambil data yang di soft delete (at_delete)
+        $tendiks = Pegawai::onlyTrashed()->with([
+            'pendidikan',
+            'golongan',
+            'unitKerja',
+        ])
+            ->tendik()
+            ->orderBy('nama')
+            ->get();
+
+        return view('tendik.trash', compact('tendiks'));
+    }
+
+    public function restore($id)
+    {
+
+        // onlyTrashed() memastikan hanya data yang memang berada di Trash
+        $tendik = Pegawai::onlyTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $tendik);
+        
+        $tendik->restore();
+
+        return redirect()->route('tendik.trash')->with('success', 'Data Tenaga Kependidikan berhasil dipulihkan');
+    }
+
+    public function forceDelete($id)
+    {
+        // onlyTrashed() memastikan hanya data yang memang berada di Trash
+        $tendik = Pegawai::onlyTrashed()->tendik()->findOrFail($id);
+
+        //memastikan hanya user yang memiliki izin forceDelete yang bisa hapus permanen
+        $this->authorize('forceDelete', $tendik);
+
+        $tendik->forceDelete();
+
+        return redirect()->route('tendik.trash')
+            ->with('success', 'Data Tenaga Kependidikan berhasil dihapus permanen');
     }
 }

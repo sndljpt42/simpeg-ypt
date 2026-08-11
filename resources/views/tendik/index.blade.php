@@ -15,6 +15,11 @@
                 <i class="fas fa-plus"></i> Tambah Tendik
             </a>
 
+            <a href="{{ route('tendik.trash') }}" class="btn btn-secondary mb-3">
+                <i class="fas fa-trash-restore"></i>
+                Data Terhapus
+            </a>
+
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show">
                     {{ session('success') }}
@@ -91,7 +96,7 @@
 
                         <tr>
 
-                            <td colspan="6" class="text-center">
+                            <td colspan="8" class="text-center">
 
                                 Belum ada data tendik.
 

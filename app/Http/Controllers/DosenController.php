@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\View\View;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\Pegawai;
 use App\Models\JenisPegawai;
 use App\Http\Requests\StorePegawaiRequest;
@@ -12,6 +13,7 @@ use App\Services\PegawaiFormService;
 
 class DosenController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -168,6 +170,9 @@ class DosenController extends Controller
     {
         $dosen = Pegawai::onlyTrashed()->findOrFail($id);
 
+        // Memastikan user memiliki hak untuk memulihkan data Dosen.
+        $this->authorize('restore', $dosen);
+        
         $dosen->restore();
 
         return redirect()
@@ -175,9 +180,14 @@ class DosenController extends Controller
             ->with('success', 'Data dosen berhasil dipulihkan.');
     }
 
-    public function forceDelete($id){
+    public function forceDelete($id)
+    {
         //mengambil hanya data dosen yang sudah di soft delete
         $dosen = Pegawai::onlyTrashed()->findOrFail($id);
+
+        //hanya user dengan role admin yang boleh hapus
+        $this->authorize('forceDelete', $dosen);
+
         $dosen->forceDelete();
 
         return redirect()

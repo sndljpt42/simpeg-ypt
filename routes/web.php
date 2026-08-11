@@ -30,6 +30,17 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/dosen/{id}/force-delete', [DosenController::class, 'forceDelete'])
         ->name('dosen.forceDelete');
 
+    //menampilkan tendik yg disoft delete
+    Route::get('/tendik/trash', [TendikController::class, 'trash'])->name('tendik.trash');
+
+    //memulihkan data tendik yang ada di trash
+    Route::patch('/tendik/{id}/restore', [TendikController::class, 'restore'])
+        ->name('tendik.restore');
+
+    //menghapus permanen data tendik
+    Route::delete('/tendik/{id}/force-delete', [TendikController::class, 'forceDelete'])
+        ->name('tendik.forceDelete');
+
     Route::resource('dosen', DosenController::class);
 
     Route::resource('tendik', TendikController::class);

@@ -7,7 +7,10 @@
 @stop
 
 @section('content')
-
+    <a href="{{ route('dosen.index') }}" class="btn btn-secondary mb-3">
+        <i class="fas fa-arrow-left"></i>
+        Kembali ke Data Dosen
+    </a>
     <div class="card">
         <div class="card-body">
 
@@ -72,19 +75,22 @@
 
                                 </form>
 
-                                <form action="{{ route('dosen.forceDelete', $dosen->id) }}" method="POST"
-                                    style="display:inline"
-                                    onsubmit="return confirm('PERINGATAN !!! Data ini akan dihapus permanen, apakah anda yakin ingin menghapus data ini?')">
+                                @can('forceDelete', $dosen)
+                                    <form action="{{ route('dosen.forceDelete', $dosen->id) }}" method="POST"
+                                        style="display:inline"
+                                        onsubmit="return confirm('PERINGATAN !!! Data ini akan dihapus permanen, apakah anda yakin ingin menghapus data ini?')">
 
-                                    @csrf
-                                    @method('DELETE')
+                                        @csrf
+                                        @method('DELETE')
 
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="fas fa-trash"></i>
-                                        Hapus Permanen
-                                    </button>
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                            Hapus Permanen
+                                        </button>
 
-                                </form>
+                                    </form>
+                                @endcan
+
                             </td>
                         </tr>
 
