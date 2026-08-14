@@ -62,4 +62,12 @@ class UnitKerjaController extends Controller
     {
         //
     }
+
+    public function byUnitKerja(UnitKerja $unitKerja){
+        return response()->json(
+            $unitKerja->programStudis()->select('id', 'nama')
+                ->orderBy('nama')
+                ->get()
+        );
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\JenisPegawai;
 
 class StorePegawaiRequest extends FormRequest
 {
@@ -45,12 +46,60 @@ class StorePegawaiRequest extends FormRequest
                 'max:50',
                 'unique:pegawais,nipy',
             ],
-            
-            //NIDN boleh kosong
-            'nidn' => [
+
+            // NUPTK wajib untuk Dosen dan opsional untuk Tendik.
+            // Jika diisi, NUPTK harus unik.
+            'nuptk' => [
+                'bail',
                 'nullable',
                 'string',
                 'max:50',
+                Rule::requiredIf(function () {
+                    return $this->isDosen();
+                }),
+                'unique:pegawais,nuptk',
+            ],
+
+            // Nomor sertifikasi dosen boleh kosong.
+            'no_serdos' => [
+                'nullable',
+                'string',
+                'max:50',
+                Rule::requiredIf(function () {
+                    return $this->isDosen();
+                }),
+                'unique:pegawais,no_serdos',
+            ],
+
+            // Tanggal sertifikasi dosen boleh kosong.
+            'tanggal_serdos' => [
+                'nullable',
+                'date',
+            ],
+
+            // Jenis dosen hanya boleh Tetap atau Tidak Tetap.
+            'jenis_dosen' => [
+                Rule::requiredIf(function () {
+                    return $this->isDosen();
+                }),
+                'nullable',
+                Rule::in([
+                    'Tetap',
+                    'Tidak Tetap',
+                ]),
+            ],
+
+            // Jenis tendik hanya boleh menggunakan pilihan yang sudah ditentukan.
+            'jenis_tendik' => [
+                Rule::requiredIf(function () {
+                    return $this->isTendik();
+                }),
+                'nullable',
+                Rule::in([
+                    'Tendik Tetap',
+                    'Tendik Tidak Tetap',
+                    'Tendik Outsourcing',
+                ]),
             ],
 
             //tempat lahir wajib diisi
@@ -69,7 +118,7 @@ class StorePegawaiRequest extends FormRequest
             //jenis kelamin wajib diisi dan harus L atau P
             'jenis_kelamin' => [
                 'required',
-                Rule::in(['L', 'P'])    
+                Rule::in(['L', 'P'])
             ],
 
             //agama
@@ -96,6 +145,18 @@ class StorePegawaiRequest extends FormRequest
                 'exists:unit_kerjas,id'
             ],
 
+            'program_studi_id' => [
+                'nullable',
+
+                // Memastikan Program Studi benar-benar ada di tabel program_studis.
+                Rule::exists('program_studis', 'id')
+
+                    // Memastikan Program Studi yang dipilih memang milik Unit Kerja yang dipilih.
+                    ->where(function ($query) {
+                        $query->where('unit_kerja_id', $this->unit_kerja_id);
+                    }),
+            ],
+
             //status pegawai
             'status_pegawai_id' => [
                 'required',
@@ -116,6 +177,20 @@ class StorePegawaiRequest extends FormRequest
         ];
     }
 
+    protected function isDosen(): bool
+    {
+        $jenisPegawai = JenisPegawai::find($this->jenis_pegawai_id);
+
+        return $jenisPegawai?->nama === JenisPegawai::DOSEN;
+    }
+
+    protected function isTendik(): bool
+    {
+        $jenisPegawai = JenisPegawai::find($this->jenis_pegawai_id);
+
+        return $jenisPegawai?->nama === JenisPegawai::TENDIK;
+    }
+
     public function messages(): array
     {
         return [
@@ -126,6 +201,22 @@ class StorePegawaiRequest extends FormRequest
 
             'nipy.unique' => 'NIPY sudah terdaftar.',
 
+            'nuptk.required' => 'NUPTK wajib diisi untuk Dosen.',
+
+            'nuptk.unique' => 'NUPTK sudah terdaftar.',
+
+            'nuptk.max' => 'NUPTK maksimal 50 karakter.',
+
+            'no_serdos.max' => 'Nomor Serdos maksimal 50 karakter.',
+
+            'no_serdos.unique' => 'Nomor Serdos sudah terdaftar.',
+
+            'tanggal_serdos.date' => 'Tanggal Serdos harus berupa tanggal yang valid.',
+
+            'jenis_dosen.in' => 'Jenis dosen harus Tetap atau Tidak Tetap.',
+
+            'jenis_tendik.in' => 'Jenis tendik tidak valid.',
+
             'tempat_lahir.required' => 'Tempat lahir wajib diisi.',
 
             'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
@@ -135,6 +226,8 @@ class StorePegawaiRequest extends FormRequest
             'pendidikan_id.required' => 'Pendidikan wajib dipilih.',
 
             'unit_kerja_id.required' => 'Unit kerja wajib dipilih.',
+
+            'program_studi_id.exists' => 'Program Studi tidak valid atau tidak sesuai dengan Unit Kerja.',
 
             'status_pegawai_id.required' => 'Status pegawai wajib dipilih.',
 
@@ -150,38 +243,50 @@ class StorePegawaiRequest extends FormRequest
 
             'jabatan_akademik_id.required' => 'Jabatan akademik wajib dipilih.',
 
+
         ];
     }
 
     public function attributes(): array
-{
-    return [
+    {
+        return [
 
-        'nipy' => 'NIPY',
+            'nipy' => 'NIPY',
 
-        'nama' => 'Nama Lengkap',
+            'nuptk' => 'NUPTK',
 
-        'tempat_lahir' => 'Tempat Lahir',
+            'no_serdos' => 'Nomor Serdos',
 
-        'tanggal_lahir' => 'Tanggal Lahir',
+            'tanggal_serdos' => 'Tanggal Serdos',
 
-        'agama_id' => 'Agama',
+            'jenis_dosen' => 'Jenis Dosen',
 
-        'pendidikan_id' => 'Pendidikan',
+            'jenis_tendik' => 'Jenis Tendik',
 
-        'unit_kerja_id' => 'Unit Kerja',
+            'nama' => 'Nama Lengkap',
 
-        'status_pegawai_id' => 'Status Pegawai',
+            'tempat_lahir' => 'Tempat Lahir',
 
-        'tmt' => 'TMT',
+            'tanggal_lahir' => 'Tanggal Lahir',
 
-        'jenis_kelamin' => 'Jenis Kelamin',
+            'agama_id' => 'Agama',
 
-        'golongan_id' => 'Golongan',
+            'pendidikan_id' => 'Pendidikan',
 
-        'jabatan_akademik_id' => 'Jabatan Akademik',
+            'unit_kerja_id' => 'Unit Kerja',
 
-    ];
-}
+            'program_studi_id' => 'Program Studi',
 
+            'status_pegawai_id' => 'Status Pegawai',
+
+            'tmt' => 'TMT',
+
+            'jenis_kelamin' => 'Jenis Kelamin',
+
+            'golongan_id' => 'Golongan',
+
+            'jabatan_akademik_id' => 'Jabatan Akademik',
+
+        ];
+    }
 }

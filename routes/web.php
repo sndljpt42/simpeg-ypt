@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\TendikController;
+use App\Http\Controllers\ProgramStudiController;
 
 Route::redirect('/', '/login');
 
@@ -29,6 +30,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/dosen/{id}/force-delete', [DosenController::class, 'forceDelete'])
         ->name('dosen.forceDelete');
+
+    Route::get(
+        '/program-studis/by-unit-kerja/{unitKerja}',
+        [ProgramStudiController::class, 'byUnitKerja']
+    )->name('program-studis.by-unit-kerja');
 
     //menampilkan tendik yg disoft delete
     Route::get('/tendik/trash', [TendikController::class, 'trash'])->name('tendik.trash');

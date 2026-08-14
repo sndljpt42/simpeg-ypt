@@ -20,25 +20,12 @@
             <table class="table table-bordered">
 
                 <tr>
+                    <th colspan="2" style="text-align: center">DATA DIRI</th>
+                </tr>
+
+                <tr>
                     <th width="250">Nama</th>
                     <td>{{ $dosen->nama }}</td>
-                </tr>
-
-                <tr>
-                    <th>NIPY</th>
-                    <td>{{ $dosen->nipy }}</td>
-                </tr>
-
-                <tr>
-                    <th>NIDN</th>
-                    <td>{{ $dosen->nidn ?: '-' }}</td>
-                </tr>
-
-                <tr>
-                    <th>Jenis Kelamin</th>
-                    <td>
-                        {{ $dosen->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}
-                    </td>
                 </tr>
 
                 <tr>
@@ -50,13 +37,39 @@
                 </tr>
 
                 <tr>
+                    <th>Jenis Kelamin</th>
+                    <td>
+                        {{ $dosen->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}
+                    </td>
+                </tr>
+
+                <tr>
                     <th>Agama</th>
                     <td>{{ $dosen->agama->nama }}</td>
                 </tr>
 
                 <tr>
-                    <th>Pendidikan</th>
-                    <td>{{ $dosen->pendidikan->nama }}</td>
+                    <th colspan="2" style="text-align: center">DATA KEPEGAWAIAN</th>
+                </tr>
+
+                <tr>
+                    <th>NIPY</th>
+                    <td>{{ $dosen->nipy }}</td>
+                </tr>
+
+                <tr>
+                    <th>NUPTK</th>
+                    <td>{{ $dosen->nuptk ?: '-' }}</td>
+                </tr>
+
+                <tr>
+                    <th>Jenis Dosen</th>
+                    <td>{{ $dosen->jenis_dosen}}</td>
+                </tr>
+
+                <tr>
+                    <th>Status Pegawai</th>
+                    <td>{{ $dosen->statusPegawai->nama }}</td>
                 </tr>
 
                 <tr>
@@ -65,8 +78,34 @@
                 </tr>
 
                 <tr>
-                    <th>Status Pegawai</th>
-                    <td>{{ $dosen->statusPegawai->nama }}</td>
+                    <th>TMT</th>
+                    <td>
+                        {{ \Carbon\Carbon::parse($dosen->tmt)->translatedFormat('d F Y') }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th colspan="2" style="text-align: center">DATA SERDOS</th>
+                </tr>
+
+                <tr>
+                    <th>No. Serdos</th>
+                    <td>{{ $dosen->no_serdos ?? '-' }}</td>
+                </tr>
+
+                <tr>
+                    <th>Tanggal Serdos</th>
+                    <td>
+                        {{ \Carbon\Carbon::parse($dosen->tanggal_serdos)->translatedFormat('d F Y') }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th colspan="2" style="text-align: center">DATA AKADEMIK</th>
+                </tr>
+                <tr>
+                    <th>Pendidikan</th>
+                    <td>{{ $dosen->pendidikan->nama }}</td>
                 </tr>
 
                 <tr>
@@ -79,12 +118,6 @@
                     <td>{{ $dosen->jabatanAkademik->nama ?? '-' }}</td>
                 </tr>
 
-                <tr>
-                    <th>TMT</th>
-                    <td>
-                        {{ \Carbon\Carbon::parse($dosen->tmt)->translatedFormat('d F Y') }}
-                    </td>
-                </tr>
 
             </table>
 

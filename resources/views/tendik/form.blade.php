@@ -1,5 +1,5 @@
 {{-- ========================================================= --}}
-{{-- Jenis Pegawai (otomatis Dosen) --}}
+{{-- Jenis Pegawai (otomatis Tendik) --}}
 {{-- ========================================================= --}}
 <input type="hidden" name="jenis_pegawai_id" value="{{ $jenisPegawais->id ?? $pegawai->jenis_pegawai_id }}">
 
@@ -18,11 +18,19 @@
 
     <div class="card-body">
 
+        {{-- ================================================= --}}
+        {{-- BARIS 1 --}}
+        {{-- ================================================= --}}
         <div class="row">
 
+            {{-- NIPY --}}
             <div class="col-md-6">
+
                 <div class="form-group">
-                    <label>NIPY <span class="text-danger">*</span></label>
+
+                    <label>
+                        NIPY <span class="text-danger">*</span>
+                    </label>
 
                     <input type="text" name="nipy" class="form-control @error('nipy') is-invalid @enderror"
                         value="{{ old('nipy', $pegawai->nipy ?? '') }}">
@@ -34,15 +42,152 @@
                     @enderror
 
                 </div>
+
             </div>
 
+
+            {{-- JENIS TENDIK --}}
+            <div class="col-md-6">
+
+                <div class="form-group">
+
+                    <label>
+                        Jenis Tendik <span class="text-danger">*</span>
+                    </label>
+
+                    <select name="jenis_tendik" class="form-control @error('jenis_tendik') is-invalid @enderror">
+
+                        <option value="">
+                            -- Pilih Jenis Tendik --
+                        </option>
+
+                        <option value="Tendik Tetap" @selected(old('jenis_tendik', $pegawai->jenis_tendik ?? '') === 'Tendik Tetap')>
+                            Tendik Tetap
+                        </option>
+
+                        <option value="Tendik Tidak Tetap" @selected(old('jenis_tendik', $pegawai->jenis_tendik ?? '') === 'Tendik Tidak Tetap')>
+                            Tendik Tidak Tetap
+                        </option>
+
+                        <option value="Tendik Outsourcing" @selected(old('jenis_tendik', $pegawai->jenis_tendik ?? '') === 'Tendik Outsourcing')>
+                            Tendik Outsourcing
+                        </option>
+
+                    </select>
+
+                    @error('jenis_tendik')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                </div>
+
+            </div>
+        </div>
+
+
+        {{-- ================================================= --}}
+        {{-- BARIS 2 --}}
+        {{-- ================================================= --}}
+        <div class="row">
+
+            {{-- UNIT KERJA --}}
+            <div class="col-md-6">
+
+                <div class="form-group">
+
+                    <label>
+                        Unit Kerja <span class="text-danger">*</span>
+                    </label>
+
+                    <select name="unit_kerja_id" class="form-control @error('unit_kerja_id') is-invalid @enderror">
+
+                        <option value="">
+                            -- Pilih Unit Kerja --
+                        </option>
+
+                        @foreach ($unitKerjas as $unit)
+                            <option value="{{ $unit->id }}" @selected(old('unit_kerja_id', $pegawai->unit_kerja_id ?? '') == $unit->id)>
+                                {{ $unit->nama }}
+                            </option>
+                        @endforeach
+
+                    </select>
+
+                    @error('unit_kerja_id')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                </div>
+
+            </div>
+
+            {{-- Program Studi --}}
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Status Pegawai<span class="text-danger">*</span></label>
+
+                    <label>Program Studi</label>
+
+                    <select name="program_studi_id" id="program_studi_id"
+                        class="form-control @error('program_studi_id') is-invalid @enderror" disabled>
+
+                        <option value="">-- Pilih Program Studi --</option>
+
+                    </select>
+
+                    @error('program_studi_id')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            {{-- TMT --}}
+            <div class="col-md-6">
+
+                <div class="form-group">
+
+                    <label>
+                        TMT <span class="text-danger">*</span>
+                    </label>
+
+                    <input type="date" name="tmt" class="form-control @error('tmt') is-invalid @enderror"
+                        value="{{ old('tmt', $pegawai->tmt ?? '') }}">
+
+                    @error('tmt')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                </div>
+
+            </div>
+
+
+            {{-- STATUS PEGAWAI --}}
+            <div class="col-md-6">
+
+                <div class="form-group">
+
+                    <label>
+                        Status Pegawai <span class="text-danger">*</span>
+                    </label>
 
                     <select name="status_pegawai_id"
                         class="form-control @error('status_pegawai_id') is-invalid @enderror">
-                        <option value="">-- Pilih Status Pegawai --</option>
+
+                        <option value="">
+                            -- Pilih Status Pegawai --
+                        </option>
 
                         @foreach ($statusPegawais as $status)
                             <option value="{{ $status->id }}" @selected(old('status_pegawai_id', $pegawai->status_pegawai_id ?? '') == $status->id)>
@@ -59,53 +204,6 @@
                     @enderror
 
                 </div>
-            </div>
-
-        </div>
-
-        <div class="row">
-
-            <div class="col-md-6">
-                <div class="form-group">
-
-                    <label>Unit Kerja<span class="text-danger">*</span></label>
-
-                    <select name="unit_kerja_id" class="form-control @error('unit_kerja_id') is-invalid @enderror">
-
-                        <option value="">-- Pilih Unit Kerja --</option>
-
-                        @foreach ($unitKerjas as $unit)
-                            <option value="{{ $unit->id }}" @selected(old('unit_kerja_id', $pegawai->unit_kerja_id ?? '') == $unit->id)>
-                                {{ $unit->nama }}
-                            </option>
-                        @endforeach
-
-                    </select>
-
-                    @error('unit_kerja_id')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="col-md-6">
-
-                <div class="form-group">
-
-                    <label>TMT<span class="text-danger">*</span></label>
-
-                    <input type="date" name="tmt" class="form-control @error('tmt') is-invalid @enderror"
-                        value="{{ old('tmt', $pegawai->tmt ?? '') }}">
-
-                    @error('tmt')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-
-                </div>
 
             </div>
 
@@ -114,7 +212,6 @@
     </div>
 
 </div>
-
 
 {{-- ========================================================= --}}
 {{-- DATA PRIBADI --}}
@@ -136,7 +233,7 @@
 
             <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror"
                 value="{{ old('nama', $pegawai->nama ?? '') }}">
-                
+
             @error('nama')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -153,7 +250,8 @@
 
                     <label>Tempat Lahir<span class="text-danger">*</span></label>
 
-                    <input type="text" name="tempat_lahir" class="form-control @error('tempat_lahir') is-invalid @enderror"
+                    <input type="text" name="tempat_lahir"
+                        class="form-control @error('tempat_lahir') is-invalid @enderror"
                         value="{{ old('tempat_lahir', $pegawai->tempat_lahir ?? '') }}">
 
                     @error('tempat_lahir')
@@ -172,7 +270,8 @@
 
                     <label>Tanggal Lahir<span class="text-danger">*</span></label>
 
-                    <input type="date" name="tanggal_lahir" class="form-control @error('tanggal_lahir') is-invalid @enderror"
+                    <input type="date" name="tanggal_lahir"
+                        class="form-control @error('tanggal_lahir') is-invalid @enderror"
                         value="{{ old('tanggal_lahir', $pegawai->tanggal_lahir ?? '') }}">
 
                     @error('tanggal_lahir')
@@ -250,7 +349,7 @@
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
-                    @enderror  
+                    @enderror
                 </div>
 
             </div>
@@ -348,8 +447,9 @@
         Simpan
     </button>
 
-    <a href="{{ route('dosen.index') }}" class="btn btn-secondary">
+    <a href="{{ route('tendik.index') }}" class="btn btn-secondary">
         Kembali
     </a>
 
 </div>
+

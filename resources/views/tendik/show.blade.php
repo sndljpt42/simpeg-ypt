@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Detail Tenaga Kependidikan')
+@section('title', 'Detail tendik')
 
 @section('content_header')
-    <h1>Detail Tenaga Kependidikan</h1>
+    <h1>Detail Tendik</h1>
 @stop
 
 @section('content')
@@ -11,7 +11,7 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">
-                Profil Dosen
+                Profil Tendik
             </h3>
         </div>
 
@@ -20,20 +20,12 @@
             <table class="table table-bordered">
 
                 <tr>
+                    <th colspan="2" style="text-align: center">DATA DIRI</th>
+                </tr>
+
+                <tr>
                     <th width="250">Nama</th>
                     <td>{{ $tendik->nama }}</td>
-                </tr>
-
-                <tr>
-                    <th>NIPY</th>
-                    <td>{{ $tendik->nipy }}</td>
-                </tr>
-
-                <tr>
-                    <th>Jenis Kelamin</th>
-                    <td>
-                        {{ $tendik->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}
-                    </td>
                 </tr>
 
                 <tr>
@@ -45,18 +37,29 @@
                 </tr>
 
                 <tr>
+                    <th>Jenis Kelamin</th>
+                    <td>
+                        {{ $tendik->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}
+                    </td>
+                </tr>
+
+                <tr>
                     <th>Agama</th>
                     <td>{{ $tendik->agama->nama }}</td>
                 </tr>
 
                 <tr>
-                    <th>Pendidikan</th>
-                    <td>{{ $tendik->pendidikan->nama }}</td>
+                    <th colspan="2" style="text-align: center">DATA KEPEGAWAIAN</th>
                 </tr>
 
                 <tr>
-                    <th>Unit Kerja</th>
-                    <td>{{ $tendik->unitKerja->nama }}</td>
+                    <th>NIPY</th>
+                    <td>{{ $tendik->nipy }}</td>
+                </tr>
+
+                <tr>
+                    <th>Jenis Tendik</th>
+                    <td>{{ $tendik->jenis_tendik}}</td>
                 </tr>
 
                 <tr>
@@ -65,8 +68,8 @@
                 </tr>
 
                 <tr>
-                    <th>Golongan</th>
-                    <td>{{ $tendik->golongan->kode ?? '-' }}</td>
+                    <th>Unit Kerja</th>
+                    <td>{{ $tendik->unitKerja->nama }}</td>
                 </tr>
 
                 <tr>
@@ -74,6 +77,19 @@
                     <td>
                         {{ \Carbon\Carbon::parse($tendik->tmt)->translatedFormat('d F Y') }}
                     </td>
+                </tr>
+
+                <tr>
+                    <th colspan="2" style="text-align: center">DATA AKADEMIK</th>
+                </tr>
+                <tr>
+                    <th>Pendidikan</th>
+                    <td>{{ $tendik->pendidikan->nama }}</td>
+                </tr>
+
+                <tr>
+                    <th>Golongan</th>
+                    <td>{{ $tendik->golongan->kode ?? '-' }}</td>
                 </tr>
 
             </table>

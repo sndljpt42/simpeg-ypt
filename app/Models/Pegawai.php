@@ -12,12 +12,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Pegawai extends Model
 {
     use HasFactory, SoftDeletes;
-    
+
     protected $fillable = [
         'jenis_pegawai_id',
         'nama',
         'nipy',
-        'nidn',
+        'nuptk',
+        'no_serdos',
+        'tanggal_serdos',
+        'jenis_dosen',
+        'jenis_tendik',
         'tempat_lahir',
         'tanggal_lahir',
         'jenis_kelamin',
@@ -25,10 +29,23 @@ class Pegawai extends Model
         'tmt',
         'pendidikan_id',
         'unit_kerja_id',
+        'program_studi_id',
         'golongan_id',
         'jabatan_akademik_id',
         'status_pegawai_id',
     ];
+
+    // protected function casts():array
+    // {
+    //     return[
+    //         //tanggal otomatis menjadi objek carbon
+    //         'tanggal_lahir' => 'date',
+    //         //tmt otomatis menjadi objek carbon
+    //         'tmt'=> 'date',
+    //         //field tangga sertifikasi dosen
+    //         'tanggal_serdos' => 'date',
+    //     ];
+    // }
 
     //pegawai memiliki satu agama
     public function agama(): BelongsTo
@@ -59,6 +76,12 @@ class Pegawai extends Model
     public function unitKerja(): BelongsTo
     {
         return $this->belongsTo(UnitKerja::class);
+    }
+
+    // pegawai memiliki satu program studi
+    public function programStudi(): BelongsTo
+    {
+        return $this->belongsTo(ProgramStudi::class);
     }
 
     //pegawai memiliki satu golongan aktif  

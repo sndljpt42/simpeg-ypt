@@ -10,10 +10,18 @@ class UnitKerja extends Model
     protected $fillable = [
         'nama',
     ];
-    
+
     //unit kerja memiliki banyak pegawai.
 
-    public function pegawais(): HasMany {
+    public function pegawais(): HasMany
+    {
         return $this->hasMany(Pegawai::class);
+    }
+
+    //unit kerja memiliki banyak prodi
+
+    public function programStudis(): HasMany
+    {
+        return $this->hasMany(ProgramStudi::class);
     }
 }
