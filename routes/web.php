@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\TendikController;
 use App\Http\Controllers\ProgramStudiController;
+use App\Http\Controllers\UnitKerjaController;
 
 Route::redirect('/', '/login');
 
@@ -50,6 +51,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('dosen', DosenController::class);
 
     Route::resource('tendik', TendikController::class);
+
+     Route::resource('unit-kerja', UnitKerjaController::class);
 });
 
 require __DIR__ . '/auth.php';
