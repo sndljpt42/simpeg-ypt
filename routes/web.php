@@ -52,7 +52,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('tendik', TendikController::class);
 
-     Route::resource('unit-kerja', UnitKerjaController::class);
+    Route::resource('unit-kerja', UnitKerjaController::class);
+
+    Route::resource('program-studi', ProgramStudiController::class);
 });
 
 require __DIR__ . '/auth.php';
