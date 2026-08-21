@@ -9,6 +9,7 @@ class Pendidikan extends Model
 {
     protected $fillable = [
         'nama',
+        'urutan',
     ];
 
     //satu pendidikan dimiliki banyak pegawai
