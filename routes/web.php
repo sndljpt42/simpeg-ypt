@@ -8,6 +8,7 @@ use App\Http\Controllers\DosenController;
 use App\Http\Controllers\TendikController;
 use App\Http\Controllers\ProgramStudiController;
 use App\Http\Controllers\UnitKerjaController;
+use App\Http\Controllers\AgamaController;
 
 Route::redirect('/', '/login');
 
@@ -55,6 +56,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('unit-kerja', UnitKerjaController::class);
 
     Route::resource('program-studi', ProgramStudiController::class);
+
+    // Menyediakan seluruh route CRUD untuk Master Agama.
+    Route::resource('agama', AgamaController::class);
+    
 });
 
 require __DIR__ . '/auth.php';
