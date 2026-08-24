@@ -9,6 +9,7 @@ use App\Http\Controllers\TendikController;
 use App\Http\Controllers\ProgramStudiController;
 use App\Http\Controllers\UnitKerjaController;
 use App\Http\Controllers\AgamaController;
+use App\Http\Controllers\JenisPegawaiController;
 use App\Http\Controllers\PendidikanController;
 
 Route::redirect('/', '/login');
@@ -62,6 +63,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('agama', AgamaController::class);
 
     Route::resource('pendidikan', PendidikanController::class);
+
+    Route::resource('jenis-pegawai', JenisPegawaiController::class);
 });
 
 require __DIR__ . '/auth.php';
