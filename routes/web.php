@@ -11,6 +11,7 @@ use App\Http\Controllers\UnitKerjaController;
 use App\Http\Controllers\AgamaController;
 use App\Http\Controllers\JenisPegawaiController;
 use App\Http\Controllers\PendidikanController;
+use App\Http\Controllers\StatusPegawaiController;
 
 Route::redirect('/', '/login');
 
@@ -65,6 +66,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('pendidikan', PendidikanController::class);
 
     Route::resource('jenis-pegawai', JenisPegawaiController::class);
+
+    Route::resource('status-pegawai', StatusPegawaiController::class);
 });
 
 require __DIR__ . '/auth.php';
