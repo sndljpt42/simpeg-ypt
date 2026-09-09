@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Golongan extends Model
 {
     protected $fillable = [
-        'nama',
+        'golongan',
+        'ruang',
+        'kode',
     ];
 
     //banyak pegawai berada pada golongan ini

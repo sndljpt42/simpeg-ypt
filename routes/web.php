@@ -12,6 +12,7 @@ use App\Http\Controllers\AgamaController;
 use App\Http\Controllers\JenisPegawaiController;
 use App\Http\Controllers\PendidikanController;
 use App\Http\Controllers\StatusPegawaiController;
+use App\Http\Controllers\GolonganController;
 
 Route::redirect('/', '/login');
 
@@ -68,6 +69,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('jenis-pegawai', JenisPegawaiController::class);
 
     Route::resource('status-pegawai', StatusPegawaiController::class);
+
+     Route::resource('golongan', GolonganController::class);
 });
 
 require __DIR__ . '/auth.php';
