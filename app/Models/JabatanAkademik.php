@@ -13,7 +13,7 @@ class JabatanAkademik extends Model
         'golongan_min_id',
         'golongan_max_id',
         'usia_pensiun',
-        'maks_kgb_setelah-mentok',
+        'maks_kgb_setelah_mentok',
     ];
 
     //golongan minimal jabatan akademik

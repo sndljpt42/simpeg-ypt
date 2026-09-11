@@ -312,37 +312,43 @@ return [
 
         [
             'text' => 'Agama',
-            'url' => '#',
+            'url' => 'agama',
             'icon' => 'fas fa-praying-hands',
         ],
 
         [
             'text' => 'Pendidikan',
-            'url' => '#',
+            'url' => 'pendidikan',
             'icon' => 'fas fa-graduation-cap',
         ],
 
         [
             'text' => 'Golongan',
-            'url' => '#',
+            'url' => 'golongan',
             'icon' => 'fas fa-layer-group',
         ],
 
         [
             'text' => 'Jabatan Akademik',
-            'url' => '#',
+            'url' => 'jabatan-akademik',
             'icon' => 'fas fa-user-tie',
         ],
 
         [
             'text' => 'Unit Kerja',
-            'url' => '#',
+            'url' => 'unit-kerja',
             'icon' => 'fas fa-building',
         ],
 
         [
             'text' => 'Status Pegawai',
-            'url' => '#',
+            'url' => 'status-pegawai',
+            'icon' => 'fas fa-id-card',
+        ],
+
+        [
+            'text' => 'Jenis Pegawai',
+            'url' => 'jenis-pegawai',
             'icon' => 'fas fa-id-card',
         ],
 
@@ -352,13 +358,13 @@ return [
 
         [
             'text' => 'Dosen',
-            'url' => '#',
+            'url' => 'dosen',
             'icon' => 'fas fa-chalkboard-teacher',
         ],
 
         [
             'text' => 'Tenaga Kependidikan',
-            'url' => '#',
+            'url' => 'tendik',
             'icon' => 'fas fa-users',
         ],
 
