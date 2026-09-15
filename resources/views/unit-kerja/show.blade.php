@@ -31,6 +31,19 @@
 
             </div>
 
+            {{-- Menampilkan Unit Kerja induk. --}}
+            <div class="form-group">
+
+                <label>Unit Kerja Induk</label>
+
+                @if ($unitKerja->parent)
+                    <input type="text" class="form-control" value="{{ $unitKerja->parent->nama }}" readonly>
+                @else
+                    <input type="text" class="form-control" value="Tidak ada (Unit Kerja tingkat atas)" readonly>
+                @endif
+
+            </div>
+
             {{-- Daftar Program Studi yang berada di Unit Kerja ini. --}}
             <div class="form-group">
 

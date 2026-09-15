@@ -18,6 +18,37 @@
 
 </div>
 
+{{-- Field untuk memilih Unit Kerja induk. --}}
+<div class="form-group">
+
+    {{-- Label untuk field Unit Kerja induk. --}}
+    <label for="parent_id">Unit Kerja Induk</label>
+
+    {{-- Dropdown Unit Kerja induk. --}}
+    <select name="parent_id" id="parent_id" class="form-control @error('parent_id') is-invalid @enderror">
+
+        {{-- Pilihan untuk Unit Kerja tingkat atas/root. --}}
+        <option value="">-- Tidak ada / Unit Kerja tingkat atas --</option>
+
+        {{-- Menampilkan seluruh Unit Kerja yang dapat menjadi induk. --}}
+        @foreach ($parentUnitKerjas as $parentUnitKerja)
+            <option value="{{ $parentUnitKerja->id }}"
+                {{ old('parent_id', $unitKerja->parent_id ?? '') == $parentUnitKerja->id ? 'selected' : '' }}>
+                {{ $parentUnitKerja->nama }}
+            </option>
+        @endforeach
+
+    </select>
+
+    {{-- Menampilkan pesan validasi jika parent_id bermasalah. --}}
+    @error('parent_id')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+
+</div>
+
 {{-- Tombol kembali ke halaman daftar Unit Kerja. --}}
 <a href="{{ route('unit-kerja.index') }}" class="btn btn-secondary">
 

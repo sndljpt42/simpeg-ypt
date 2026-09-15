@@ -24,8 +24,10 @@ class UnitKerjaController extends Controller
      */
     public function create()
     {
-        //
-        return view('unit-kerja.create');
+        //mengambil unit kerja yg dapat menjadi induk
+
+        $parentUnitKerjas = UnitKerja::orderBy('nama')->get();
+        return view('unit-kerja.create', compact('parentUnitKerjas'));
     }
 
     /**
@@ -70,8 +72,12 @@ class UnitKerjaController extends Controller
      */
     public function edit(UnitKerja $unitKerja)
     {
-        // Mengirim data Unit Kerja yang dipilih ke halaman Edit.
-        return view('unit-kerja.edit', compact('unitKerja'));
+        // Mengambil Unit Kerja yang dapat menjadi induk.
+        // Dirinya sendiri dan seluruh keturunannya dikecualikan.
+        $parentUnitKerjas = $this->getAvailableParentUnitKerjas($unitKerja);
+
+        // Mengirim data Unit Kerja dan daftar calon induk ke halaman Edit.
+        return view('unit-kerja.edit', compact('unitKerja', 'parentUnitKerjas'));
     }
 
     /**
@@ -127,6 +133,55 @@ class UnitKerjaController extends Controller
                 'success',
                 'Unit Kerja "' . $namaUnitKerja . '" berhasil dihapus beserta Prodi Terkait.'
             );
+    }
+
+    /**
+     * Mengambil Unit Kerja yang dapat dipilih sebagai parent.
+     *
+     * Unit Kerja yang sedang diedit dan seluruh keturunannya
+     * dikeluarkan dari daftar agar tidak terjadi circular reference.
+     */
+    private function getAvailableParentUnitKerjas(UnitKerja $unitKerja): \Illuminate\Database\Eloquent\Collection
+    {
+        // Mengambil seluruh ID keturunan Unit Kerja.
+        $descendantIds = $this->getDescendantIds($unitKerja);
+
+        // Menambahkan ID dirinya sendiri agar tidak dapat memilih dirinya
+        // sebagai parent.
+        $excludedIds = array_merge(
+            [$unitKerja->id],
+            $descendantIds
+        );
+
+        // Mengambil Unit Kerja yang tidak termasuk dirinya sendiri
+        // maupun seluruh keturunannya.
+        return UnitKerja::whereNotIn('id', $excludedIds)
+            ->orderBy('nama')
+            ->get();
+    }
+
+    /**
+     * Mengambil seluruh ID keturunan Unit Kerja secara rekursif.
+     */
+    private function getDescendantIds(UnitKerja $unitKerja): array
+    {
+        $descendantIds = [];
+
+        // Mengambil child langsung.
+        $children = $unitKerja->children()->get();
+
+        foreach ($children as $child) {
+            // Menambahkan ID child.
+            $descendantIds[] = $child->id;
+
+            // Mengambil seluruh keturunan child.
+            $descendantIds = array_merge(
+                $descendantIds,
+                $this->getDescendantIds($child)
+            );
+        }
+
+        return $descendantIds;
     }
 
     public function byUnitKerja(UnitKerja $unitKerja)

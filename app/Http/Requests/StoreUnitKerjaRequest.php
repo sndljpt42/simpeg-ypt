@@ -31,6 +31,14 @@ class StoreUnitKerjaRequest extends FormRequest
                 'unique:unit_kerjas,nama',
             ],
 
+            // Unit Kerja induk boleh kosong untuk Unit Kerja tingkat atas.
+            // Jika diisi, ID harus berupa angka dan harus ada di tabel unit_kerjas.
+            'parent_id' => [
+                'nullable',
+                'integer',
+                'exists:unit_kerjas,id',
+            ],
+
         ];
     }
 
@@ -53,6 +61,11 @@ class StoreUnitKerjaRequest extends FormRequest
             // Pesan ketika nama sudah digunakan.
             'nama.unique' => 'Nama Unit Kerja sudah terdaftar.',
 
+            // Pesan ketika parent_id bukan berupa angka.
+            'parent_id.integer' => 'Unit Kerja induk tidak valid.',
+
+            // Pesan ketika parent_id tidak ditemukan.
+            'parent_id.exists' => 'Unit Kerja induk yang dipilih tidak ditemukan.',
         ];
     }
 
@@ -65,6 +78,9 @@ class StoreUnitKerjaRequest extends FormRequest
 
             // Mengubah nama field teknis menjadi nama yang lebih ramah.
             'nama' => 'Nama Unit Kerja',
+
+            // Mengubah nama field teknis menjadi nama yang lebih ramah.
+            'parent_id' => 'Unit Kerja Induk',
 
         ];
     }

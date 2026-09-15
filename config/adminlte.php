@@ -341,6 +341,13 @@ return [
         ],
 
         [
+            'text' => 'Program Studi',
+            'url' => 'program-studi',
+            'icon' => 'fas fa-building',
+        ],
+
+
+        [
             'text' => 'Status Pegawai',
             'url' => 'status-pegawai',
             'icon' => 'fas fa-id-card',
