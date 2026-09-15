@@ -61,7 +61,7 @@ return new class extends Migration
         // hubungan parent dari Unit Kerja turunannya.
         if ($universitasPasundanId) {
             DB::table('unit_kerjas')
-                ->where('pdarent_id', $universitasPasundanId)
+                ->where('parent_id', $universitasPasundanId)
                 ->update([
                     'parent_id' => null,
                     'updated_at' => now(),
