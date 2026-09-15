@@ -106,10 +106,10 @@
                         <option value="">
                             -- Pilih Unit Kerja --
                         </option>
-
+                        {{-- Menampilkan Unit Kerja sesuai struktur parent-child. --}}
                         @foreach ($unitKerjas as $unit)
                             <option value="{{ $unit->id }}" @selected(old('unit_kerja_id', $pegawai->unit_kerja_id ?? '') == $unit->id)>
-                                {{ $unit->nama }}
+                                {{ str_repeat('— ', $unit->hierarchy_level) }}{{ $unit->nama }}
                             </option>
                         @endforeach
 
@@ -452,4 +452,3 @@
     </a>
 
 </div>
-
