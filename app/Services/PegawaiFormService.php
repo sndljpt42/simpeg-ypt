@@ -20,13 +20,26 @@ class PegawaiFormService
         return [
             'agamas' => Agama::orderBy('nama')->get(),
             'pendidikans' => Pendidikan::orderBy('nama')->get(),
-            
+
             // Gunakan Unit Kerja yang sudah disusun berdasarkan hierarchy.
             'unitKerjas' => $this->getUnitKerjaHierarchy(),
-           
+
             'golongans' => Golongan::orderBy('kode')->get(),
             'jabatanAkademiks' => JabatanAkademik::orderBy('nama')->get(),
             'statusPegawais' => StatusPegawai::orderBy('nama')->get(),
+        ];
+    }
+
+    /**
+     * Mengambil data master yang dibutuhkan
+     * untuk form Riwayat Golongan.
+     */
+    public function getRiwayatGolonganFormData(): array
+    {
+        return [
+            // Form hanya membutuhkan daftar master Golongan.
+            // Diurutkan berdasarkan kode agar tampil teratur.
+            'golongans' => Golongan::orderBy('kode')->get(),
         ];
     }
 

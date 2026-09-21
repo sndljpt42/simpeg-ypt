@@ -32,4 +32,11 @@ class Golongan extends Model
     public function jabatanAkademikMax(): HasMany {
         return $this->hasMany(JabatanAkademik::class, 'golongan_max_id');
     }
+
+    //Satu golongan dapat digunakan oleh banyak riwayat pegawai.
+
+    public function riwayatGolongans():HasMany
+    {
+        return $this->hasMany(RiwayatGolongan::class);
+    }
 }

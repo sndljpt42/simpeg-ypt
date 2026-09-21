@@ -392,7 +392,7 @@ return [
         ],
 
         [
-            'text' => 'Riwayat Jabatan',
+            'text' => 'Riwayat Jabatan Akademik',
             'url' => '#',
             'icon' => 'fas fa-briefcase',
         ],

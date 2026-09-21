@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\JenisPegawai;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -110,5 +111,13 @@ class Pegawai extends Model
         return $query->whereHas('jenisPegawai', function (Builder $query) {
             $query->where('nama', JenisPegawai::TENDIK);
         });
+    }
+
+    // Satu pegawai dapat memiliki banyak riwayat golongan.
+    public function riwayatGolongans(): HasMany
+    {
+        return $this->hasMany(RiwayatGolongan::class)
+            // urutan TMT terbaru ke lama
+            ->orderByDesc('tmt');
     }
 }
