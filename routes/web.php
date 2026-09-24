@@ -15,6 +15,7 @@ use App\Http\Controllers\StatusPegawaiController;
 use App\Http\Controllers\GolonganController;
 use App\Http\Controllers\JabatanAkademikController;
 use App\Http\Controllers\RiwayatGolonganController;
+use App\Http\Controllers\RiwayatKGBController;
 
 Route::redirect('/', '/login');
 
@@ -59,10 +60,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('tendik', TendikController::class);
 
+    Route::resource('pegawais.riwayat-golongan', RiwayatGolonganController::class);
+
     Route::resource(
-        'pegawais.riwayat-golongan',
-        RiwayatGolonganController::class
+        'pegawais.riwayat-kgb',
+        RiwayatKGBController::class
     );
+
+
 
     Route::resource('unit-kerja', UnitKerjaController::class);
 
@@ -80,7 +85,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('golongan', GolonganController::class);
 
     Route::resource('jabatan-akademik', JabatanAkademikController::class);
-
 });
 
 require __DIR__ . '/auth.php';

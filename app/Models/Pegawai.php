@@ -120,4 +120,10 @@ class Pegawai extends Model
             // urutan TMT terbaru ke lama
             ->orderByDesc('tmt');
     }
+
+    public function riwayatKGBs(): HasMany
+    {
+        // Satu pegawai dapat memiliki banyak riwayat KGB.
+        return $this->hasMany(RiwayatKGB::class);
+    }
 }

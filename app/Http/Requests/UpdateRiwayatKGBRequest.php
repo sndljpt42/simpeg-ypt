@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRiwayatGolonganRequest extends FormRequest
+class UpdateRiwayatKGBRequest extends FormRequest
 {
     /**
      * Menentukan apakah user boleh melakukan request ini.
@@ -16,22 +16,14 @@ class StoreRiwayatGolonganRequest extends FormRequest
     }
 
     /**
-     * Menentukan aturan validasi data Riwayat Golongan.
+     * Menentukan aturan validasi data Riwayat KGB.
      */
     public function rules(): array
     {
         return [
 
-            // Golongan wajib dipilih.
-            // ID harus berupa angka dan harus ada di tabel golongans.
-            'golongan_id' => [
-                'required',
-                'integer',
-                'exists:golongans,id',
-            ],
-
             // Nomor SK wajib diisi, berupa teks,
-            // dan maksimal 100 karakter.
+            // dan maksimal 50 karakter.
             'nomor_sk' => [
                 'required',
                 'string',
@@ -66,15 +58,6 @@ class StoreRiwayatGolonganRequest extends FormRequest
     {
         return [
 
-            // Pesan ketika Golongan tidak dipilih.
-            'golongan_id.required' => 'Golongan wajib dipilih.',
-
-            // Pesan ketika ID Golongan bukan berupa angka.
-            'golongan_id.integer' => 'Golongan yang dipilih tidak valid.',
-
-            // Pesan ketika Golongan tidak ditemukan.
-            'golongan_id.exists' => 'Golongan yang dipilih tidak ditemukan.',
-
             // Pesan ketika Nomor SK tidak diisi.
             'nomor_sk.required' => 'Nomor SK wajib diisi.',
 
@@ -108,9 +91,6 @@ class StoreRiwayatGolonganRequest extends FormRequest
     public function attributes(): array
     {
         return [
-
-            // Mengubah nama field teknis menjadi nama yang lebih ramah.
-            'golongan_id' => 'Golongan',
 
             // Mengubah nama field teknis menjadi nama yang lebih ramah.
             'nomor_sk' => 'Nomor SK',
