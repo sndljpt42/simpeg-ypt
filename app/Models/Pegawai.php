@@ -126,4 +126,12 @@ class Pegawai extends Model
         // Satu pegawai dapat memiliki banyak riwayat KGB.
         return $this->hasMany(RiwayatKGB::class);
     }
+
+    // Satu pegawai dapat memiliki banyak riwayat jabatan akademik.
+    public function riwayatJabatanAkademiks(): HasMany
+    {
+        return $this->hasMany(RiwayatJabatanAkademik::class)
+            // urutan TMT terbaru ke lama
+            ->orderByDesc('tmt');
+    }
 }

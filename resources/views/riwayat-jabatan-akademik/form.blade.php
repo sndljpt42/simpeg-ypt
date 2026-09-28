@@ -12,10 +12,12 @@
 
                     {{-- Ikon identitas pegawai. --}}
                     <div class="mr-3">
+
                         <span class="bg-primary rounded-circle d-flex align-items-center justify-content-center"
                             style="width: 48px; height: 48px;">
                             <i class="fas fa-user text-white"></i>
                         </span>
+
                     </div>
 
                     <div>
@@ -38,29 +40,26 @@
             </div>
 
 
-            {{-- Status Golongan saat ini. --}}
+            {{-- Jabatan Akademik saat ini. --}}
             <div class="col-md-4 mt-3 mt-md-0">
 
                 <div class="border-left pl-3">
 
                     <div class="text-muted small">
-                        GOLONGAN SAAT INI
+                        JABATAN AKADEMIK SAAT INI
                     </div>
 
-                    @if ($pegawai->golongan)
-                        <div class="d-flex align-items-center mt-1">
+                    @if ($pegawai->jabatanAkademik)
+                        <div class="font-weight-bold mt-1">
 
-                            <i class="fas fa-layer-group text-primary mr-2"></i>
+                            <i class="fas fa-graduation-cap text-primary mr-1"></i>
 
-                            <span class="font-weight-bold">
-                                {{ $pegawai->golongan->kode }}
-                            </span>
+                            {{ $pegawai->jabatanAkademik->nama }}
 
                         </div>
                     @else
                         <div class="text-muted mt-1">
-                            <i class="fas fa-minus-circle mr-1"></i>
-                            Belum ada golongan
+                            Belum ada jabatan akademik
                         </div>
                     @endif
 
@@ -69,7 +68,7 @@
             </div>
 
 
-            {{-- Penanda konteks halaman. --}}
+            {{-- Konteks halaman. --}}
             <div class="col-md-3 mt-3 mt-md-0">
 
                 <div class="border-left pl-3">
@@ -79,8 +78,10 @@
                     </div>
 
                     <div class="font-weight-bold mt-1">
+
                         <i class="fas fa-history text-info mr-1"></i>
-                        Golongan
+                        Jabatan Akademik
+
                     </div>
 
                 </div>
@@ -93,7 +94,8 @@
 
 </div>
 
-{{-- Menampilkan pesan validasi jika ada error. --}}
+
+{{-- Menampilkan seluruh pesan validasi. --}}
 @if ($errors->any())
 
     <div class="alert alert-danger">
@@ -103,7 +105,9 @@
         <ul class="mb-0 mt-2">
 
             @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
+                <li>
+                    {{ $error }}
+                </li>
             @endforeach
 
         </ul>
@@ -113,104 +117,137 @@
 @endif
 
 
-{{-- Golongan --}}
+{{-- Jabatan Akademik. --}}
 <div class="form-group">
-    <label for="golongan_id">Golongan</label>
 
-    <select name="golongan_id" id="golongan_id" class="form-control @error('golongan_id') is-invalid @enderror">
-        <option value="">-- Pilih Golongan --</option>
+    <label for="jabatan_akademik_id">
+        Jabatan Akademik
+    </label>
 
-        @foreach ($golongans as $golongan)
-            <option value="{{ $golongan->id }}"
-                {{ old('golongan_id', $riwayatGolongan->golongan_id ?? '') == $golongan->id ? 'selected' : '' }}>
-                {{ $golongan->kode }}
+    <select name="jabatan_akademik_id" id="jabatan_akademik_id"
+        class="form-control @error('jabatan_akademik_id') is-invalid @enderror">
+
+        <option value="">
+            -- Pilih Jabatan Akademik --
+        </option>
+
+        @foreach ($jabatanAkademiks as $jabatanAkademik)
+            <option value="{{ $jabatanAkademik->id }}"
+                {{ old('jabatan_akademik_id', $riwayatJabatanAkademik->jabatan_akademik_id ?? '') == $jabatanAkademik->id
+                    ? 'selected'
+                    : '' }}>
+                {{ $jabatanAkademik->nama }}
             </option>
         @endforeach
+
     </select>
 
-    {{-- Pesan error Golongan --}}
-    @error('golongan_id')
+    {{-- Pesan error Jabatan Akademik. --}}
+    @error('jabatan_akademik_id')
         <div class="invalid-feedback">
             {{ $message }}
         </div>
     @enderror
+
 </div>
 
-{{-- Nomor SK --}}
+
+{{-- Nomor SK. --}}
 <div class="form-group">
-    <label for="nomor_sk">Nomor SK</label>
+
+    <label for="nomor_sk">
+        Nomor SK
+    </label>
 
     <input type="text" name="nomor_sk" id="nomor_sk" class="form-control @error('nomor_sk') is-invalid @enderror"
-        value="{{ old('nomor_sk', $riwayatGolongan->nomor_sk ?? '') }}">
+        value="{{ old('nomor_sk', $riwayatJabatanAkademik->nomor_sk ?? '') }}"
+        placeholder="Masukkan nomor SK">
 
-    {{-- Pesan error Nomor SK --}}
+    {{-- Pesan error Nomor SK. --}}
     @error('nomor_sk')
         <div class="invalid-feedback">
             {{ $message }}
         </div>
     @enderror
+
 </div>
 
-{{-- Tanggal SK --}}
+
+{{-- Tanggal SK. --}}
 <div class="form-group">
-    <label for="tanggal_sk">Tanggal SK</label>
+
+    <label for="tanggal_sk">
+        Tanggal SK
+    </label>
 
     <input type="date" name="tanggal_sk" id="tanggal_sk"
         class="form-control @error('tanggal_sk') is-invalid @enderror"
         value="{{ old(
             'tanggal_sk',
-            isset($riwayatGolongan) && $riwayatGolongan->tanggal_sk ? $riwayatGolongan->tanggal_sk->format('Y-m-d') : '',
+            isset($riwayatJabatanAkademik) ? $riwayatJabatanAkademik->tanggal_sk?->format('Y-m-d') : '',
         ) }}">
 
-    {{-- Pesan error Tanggal SK --}}
+    {{-- Pesan error Tanggal SK. --}}
     @error('tanggal_sk')
         <div class="invalid-feedback">
             {{ $message }}
         </div>
     @enderror
+
 </div>
 
-{{-- TMT --}}
+
+{{-- TMT. --}}
 <div class="form-group">
-    <label for="tmt">TMT</label>
+
+    <label for="tmt">
+        TMT
+    </label>
 
     <input type="date" name="tmt" id="tmt" class="form-control @error('tmt') is-invalid @enderror"
-        value="{{ old('tmt', isset($riwayatGolongan) && $riwayatGolongan->tmt ? $riwayatGolongan->tmt->format('Y-m-d') : '') }}">
+        value="{{ old('tmt', isset($riwayatJabatanAkademik) ? $riwayatJabatanAkademik->tmt?->format('Y-m-d') : '') }}">
 
-    {{-- Pesan error TMT --}}
+    {{-- Pesan error TMT. --}}
     @error('tmt')
         <div class="invalid-feedback">
             {{ $message }}
         </div>
     @enderror
+
 </div>
 
-{{-- Keterangan --}}
+
+{{-- Keterangan. --}}
 <div class="form-group">
-    <label for="keterangan">Keterangan</label>
 
-    <textarea name="keterangan" id="keterangan" rows="3"
-        class="form-control @error('keterangan') is-invalid @enderror">{{ old('keterangan', $riwayatGolongan->keterangan ?? '') }}</textarea>
+    <label for="keterangan">
+        Keterangan
+    </label>
 
-    {{-- Pesan error Keterangan --}}
+    <textarea name="keterangan" id="keterangan" rows="4"
+        class="form-control @error('keterangan') is-invalid @enderror" placeholder="Keterangan tambahan jika ada">{{ old('keterangan', $riwayatJabatanAkademik->keterangan ?? '') }}</textarea>
+
+    {{-- Pesan error Keterangan. --}}
     @error('keterangan')
         <div class="invalid-feedback">
             {{ $message }}
         </div>
     @enderror
+
 </div>
 
 
 {{-- Tombol aksi form. --}}
 <div class="mt-4">
 
-    {{-- Kembali ke halaman Index Riwayat Golongan. --}}
-    <a href="{{ route('pegawais.riwayat-golongan.index', $pegawai) }}" class="btn btn-secondary">
+    {{-- Kembali ke halaman Index. --}}
+    <a href="{{ route('pegawais.riwayat-jabatan-akademik.index', $pegawai) }}"
+        class="btn btn-secondary">
         <i class="fas fa-arrow-left"></i>
         Kembali
     </a>
 
-    {{-- Tombol menyimpan data. --}}
+    {{-- Simpan data Create atau Edit. --}}
     <button type="submit" class="btn btn-primary">
         <i class="fas fa-save"></i>
         Simpan

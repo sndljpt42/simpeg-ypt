@@ -25,7 +25,7 @@ class PegawaiFormService
             'unitKerjas' => $this->getUnitKerjaHierarchy(),
 
             'golongans' => Golongan::orderBy('kode')->get(),
-            'jabatanAkademiks' => JabatanAkademik::orderBy('nama')->get(),
+            'jabatanAkademiks' => JabatanAkademik::orderBy('id')->get(),
             'statusPegawais' => StatusPegawai::orderBy('nama')->get(),
         ];
     }
@@ -40,6 +40,19 @@ class PegawaiFormService
             // Form hanya membutuhkan daftar master Golongan.
             // Diurutkan berdasarkan kode agar tampil teratur.
             'golongans' => Golongan::orderBy('kode')->get(),
+        ];
+    }
+
+    /**
+     * Mengambil data master yang dibutuhkan
+     * untuk form Riwayat Jabatan Akademik.
+     */
+    public function getRiwayatJabatanAkademikFormData(): array
+    {
+        return [
+            // Form hanya membutuhkan daftar master Jabatan Akademik.
+            // Diurutkan berdasarkan nama agar tampil teratur.
+            'jabatanAkademiks' => JabatanAkademik::orderBy('id')->get(),
         ];
     }
 

@@ -16,6 +16,7 @@ use App\Http\Controllers\GolonganController;
 use App\Http\Controllers\JabatanAkademikController;
 use App\Http\Controllers\RiwayatGolonganController;
 use App\Http\Controllers\RiwayatKGBController;
+use App\Http\Controllers\RiwayatJabatanAkademikController;
 
 Route::redirect('/', '/login');
 
@@ -67,8 +68,12 @@ Route::middleware(['auth'])->group(function () {
         RiwayatKGBController::class
     );
 
-
-
+    // Route CRUD Riwayat Jabatan Akademik.
+    Route::resource(
+        'pegawais.riwayat-jabatan-akademik',
+        RiwayatJabatanAkademikController::class
+    );
+    
     Route::resource('unit-kerja', UnitKerjaController::class);
 
     Route::resource('program-studi', ProgramStudiController::class);
