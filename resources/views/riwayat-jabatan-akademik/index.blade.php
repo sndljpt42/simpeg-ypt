@@ -110,7 +110,7 @@
 
 
             {{-- Kembali ke halaman sebelumnya, misalnya detail Dosen. --}}
-            <a href="{{ url()->previous() }}" class="btn btn-secondary mb-3">
+            <a href="{{ route('riwayat.jabatan-akademik') }}" class="btn btn-secondary mb-3">
                 <i class="fas fa-arrow-left"></i>
                 Kembali
             </a>

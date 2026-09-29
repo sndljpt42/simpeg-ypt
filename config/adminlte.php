@@ -381,19 +381,19 @@ return [
 
         [
             'text' => 'Riwayat Golongan',
-            'url' => '#',
+            'url' => 'riwayat/golongan',
             'icon' => 'fas fa-history',
         ],
 
         [
             'text' => 'Riwayat KGB',
-            'url' => '#',
+            'url' => 'riwayat/kgb',
             'icon' => 'fas fa-money-check-alt',
         ],
 
         [
-            'text' => 'Riwayat Jabatan Akademik',
-            'url' => '#',
+            'text' => 'Riwayat JAD',
+            'url' => 'riwayat/jabatan-akademik',
             'icon' => 'fas fa-briefcase',
         ],
 

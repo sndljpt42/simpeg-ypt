@@ -79,7 +79,7 @@
             </div>
 
             {{-- Kembali ke halaman sebelumnya. --}}
-            <a href="{{ url()->previous() }}" class="btn btn-secondary mb-3">
+            <a href="{{ route('riwayat.kgb') }}" class="btn btn-secondary mb-3">
                 <i class="fas fa-arrow-left"></i>
                 Kembali
             </a>

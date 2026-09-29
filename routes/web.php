@@ -15,8 +15,11 @@ use App\Http\Controllers\StatusPegawaiController;
 use App\Http\Controllers\GolonganController;
 use App\Http\Controllers\JabatanAkademikController;
 use App\Http\Controllers\RiwayatGolonganController;
+use App\Http\Controllers\RiwayatGolonganNavigationController;
+use App\Http\Controllers\RiwayatKgbNavigationController;
 use App\Http\Controllers\RiwayatKGBController;
 use App\Http\Controllers\RiwayatJabatanAkademikController;
+use App\Http\Controllers\RiwayatJadNavigationController;
 
 Route::redirect('/', '/login');
 
@@ -63,22 +66,20 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('pegawais.riwayat-golongan', RiwayatGolonganController::class);
 
-    Route::resource(
-        'pegawais.riwayat-kgb',
-        RiwayatKGBController::class
-    );
+    Route::get('riwayat/golongan', [RiwayatGolonganNavigationController::class, 'index'])->name('riwayat.golongan');
 
-    // Route CRUD Riwayat Jabatan Akademik.
-    Route::resource(
-        'pegawais.riwayat-jabatan-akademik',
-        RiwayatJabatanAkademikController::class
-    );
-    
+    Route::resource('pegawais.riwayat-kgb', RiwayatKGBController::class);
+
+    Route::get('riwayat/kgb', [RiwayatKgbNavigationController::class, 'index'])->name('riwayat.kgb');
+
+    Route::resource('pegawais.riwayat-jabatan-akademik', RiwayatJabatanAkademikController::class);
+
+    Route::get('riwayat/jabatan-akademik', [RiwayatJadNavigationController::class, 'index'])->name('riwayat.jabatan-akademik');
+
     Route::resource('unit-kerja', UnitKerjaController::class);
 
     Route::resource('program-studi', ProgramStudiController::class);
 
-    // Menyediakan seluruh route CRUD untuk Master Agama.
     Route::resource('agama', AgamaController::class);
 
     Route::resource('pendidikan', PendidikanController::class);
