@@ -134,4 +134,10 @@ class Pegawai extends Model
             // urutan TMT terbaru ke lama
             ->orderByDesc('tmt');
     }
+
+    // Satu pegawai dapat memiliki banyak dokumen.
+    public function dokumens(): HasMany
+    {
+        return $this->hasMany(Dokumen::class);
+    }
 }

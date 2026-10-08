@@ -20,6 +20,7 @@ use App\Http\Controllers\RiwayatKgbNavigationController;
 use App\Http\Controllers\RiwayatKGBController;
 use App\Http\Controllers\RiwayatJabatanAkademikController;
 use App\Http\Controllers\RiwayatJadNavigationController;
+use App\Http\Controllers\DokumenController;
 
 Route::redirect('/', '/login');
 
@@ -76,6 +77,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('riwayat/jabatan-akademik', [RiwayatJadNavigationController::class, 'index'])->name('riwayat.jabatan-akademik');
 
+    Route::get('pegawais/{pegawai}/dokumen',[DokumenController::class, 'index'])->name('pegawais.dokumen.index');
+    
     Route::resource('unit-kerja', UnitKerjaController::class);
 
     Route::resource('program-studi', ProgramStudiController::class);
