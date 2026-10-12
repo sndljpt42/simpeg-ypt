@@ -67,6 +67,14 @@
                 <i class="fas fa-folder-open mr-1"></i>
                 Repository Dokumen
             </h3>
+            <div class="card-tools">
+                {{-- Membuka form untuk menambahkan dokumen baru --}}
+                <a href="{{ route('pegawais.dokumen.create', $pegawai) }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i>
+                    Tambah Dokumen
+                </a>
+            </div>
+
         </div>
 
         <div class="card-body">
@@ -145,10 +153,12 @@
 
                                     <td class="text-center">
 
-                                        {{-- Belum ada action pada tahap ini --}}
-                                        <span class="text-muted">
-                                            -
-                                        </span>
+                                        {{-- Membuka form untuk mengubah metadata dokumen. --}}
+                                        <a href="{{ route('pegawais.dokumen.edit', [$pegawai, $dokumen]) }}"
+                                            class="btn btn-warning btn-sm" title="Edit dokumen">
+                                            <i class="fas fa-edit"></i>
+                                            Edit
+                                        </a>
 
                                     </td>
 

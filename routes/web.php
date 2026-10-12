@@ -77,8 +77,32 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('riwayat/jabatan-akademik', [RiwayatJadNavigationController::class, 'index'])->name('riwayat.jabatan-akademik');
 
-    Route::get('pegawais/{pegawai}/dokumen',[DokumenController::class, 'index'])->name('pegawais.dokumen.index');
-    
+    Route::get('pegawais/{pegawai}/dokumen', [DokumenController::class, 'index'])->name('pegawais.dokumen.index');
+
+    // Menampilkan form untuk menambahkan dokumen baru.
+    Route::get(
+        'pegawais/{pegawai}/dokumen/create',
+        [DokumenController::class, 'create']
+    )->name('pegawais.dokumen.create');
+
+    // Menyimpan dokumen baru.
+    Route::post(
+        'pegawais/{pegawai}/dokumen',
+        [DokumenController::class, 'store']
+    )->name('pegawais.dokumen.store');
+
+    // Menampilkan form untuk mengedit dokumen.
+    Route::get(
+        'pegawais/{pegawai}/dokumen/{dokumen}/edit',
+        [DokumenController::class, 'edit']
+    )->name('pegawais.dokumen.edit');
+
+    // Memperbarui data dokumen.
+    Route::put(
+        'pegawais/{pegawai}/dokumen/{dokumen}',
+        [DokumenController::class, 'update']
+    )->name('pegawais.dokumen.update');
+
     Route::resource('unit-kerja', UnitKerjaController::class);
 
     Route::resource('program-studi', ProgramStudiController::class);
