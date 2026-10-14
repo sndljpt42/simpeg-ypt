@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Pegawai;
 use App\Models\Dokumen;
 use App\Http\Requests\StoreDokumenRequest;
+use App\Http\Requests\StoreDokumenVersionRequest;
 use App\Http\Requests\UpdateDokumenRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class DokumenController extends Controller
 {
@@ -54,7 +58,7 @@ class DokumenController extends Controller
         abort_unless($dokumen->pegawai_id === $pegawai->id, 404);
         return view('pegawais.dokumen.edit', [
             'pegawai' => $pegawai,
-            'dokumen' =>$dokumen
+            'dokumen' => $dokumen
         ]);
     }
 
@@ -81,5 +85,75 @@ class DokumenController extends Controller
                 'success',
                 'Dokumen "' . $dokumen->nama . '" berhasil diperbarui.'
             );
+    }
+
+    public function storeVersion(
+        StoreDokumenVersionRequest $request,
+        Pegawai $pegawai,
+        Dokumen $dokumen
+    ) {
+        //memastikan dokumen milik pegawai berdasarkan ruote/URL
+        abort_unless($dokumen->pegawai_id === $pegawai->id, 404);
+
+        $file = $request->file('file');
+
+        //file disimpan di disk private dengan nama acak dari laravel
+        $path = $file->store("documents/pegawai/{$pegawai->id}/{$dokumen->id}", 'local');
+
+        // Jika penyimpanan file gagal, hentikan proses dan tampilkan pesan pada form.
+        if (! $path) {
+            return back()
+                ->withInput()
+                ->withErrors(['file' => 'File Gagal disimpan. silahkan coba kembali.']);
+        }
+        try {
+            // Simpan metadata versi dalam transaksi database.
+            $version = DB::transaction(function () use ($dokumen, $file, $path) {
+                // Kunci record dokumen agar dua upload bersamaan tidak mendapat
+                // nomor versi yang sama.
+                $dokumenTerkunci = Dokumen::query()
+                    ->lockForUpdate()
+                    ->findOrFail($dokumen->id);
+
+                // Ambil nomor versi terbesar, lalu gunakan nomor berikutnya.
+                // Jika belum ada versi, hasilnya menjadi versi 1.
+                $nomorVersi = (int) $dokumenTerkunci->versions()->max('version') + 1;
+
+                // Relasi versions() mengisi dokumen_id secara otomatis.
+                // Informasi file disimpan terpisah dari file fisiknya.
+                return $dokumenTerkunci->versions()->create([
+                    'version' => $nomorVersi,
+                    'nama_file' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'mime_type' => $file->getMimeType(),
+                    'ukuran' => $file->getSize(),
+
+                    // Checksum membantu mengenali isi file yang identik.
+                    'checksum' => hash_file('sha256', $file->getRealPath()),
+                ]);
+            });
+        } catch (Throwable $exception) {
+            //jika transaksi db gagal, hapus file agar tidak tertinggal
+            Storage::disk('local')->delete($path);
+            throw $exception;
+        }
+
+        return redirect()
+            ->route('pegawais.dokumen.index',$pegawai
+            )->with(
+                'success',
+                "Versi {$version->version} untuk dokumen \"{$dokumen->nama}\" berhasil diunggah."
+            );
+    }
+
+    public function createVersion(Pegawai $pegawai, Dokumen $dokumen): View
+    {
+        //memastikan dokumen milik pegawai berdasarkan ruote/URL
+        abort_unless($dokumen->pegawai_id === $pegawai->id, 404);
+
+        return view('pegawais.dokumen.versions.create', [
+            'pegawai' => $pegawai,
+            'dokumen' => $dokumen
+        ]);
     }
 }

@@ -11,6 +11,18 @@
 {{-- Isi halaman --}}
 @section('content')
 
+    {{-- Menampilkan pesan sukses dari proses tambah atau upload dokumen. --}}
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-1"></i>
+            {{ session('success') }}
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Tutup">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     {{-- Informasi Pegawai --}}
     <div class="card">
 
@@ -49,7 +61,7 @@
                     <strong>Unit Kerja</strong>
                     <div>
                         {{ $pegawai->unitKerja?->nama ?? '-' }}
-                    </div>  
+                    </div>
                 </div>
 
             </div>
@@ -111,7 +123,7 @@
                                 </th>
 
                                 <th width="120">
-                                    Jumlah Versi
+                                    Versi Terakhir
                                 </th>
 
                                 <th width="120">
@@ -143,8 +155,17 @@
                                     </td>
 
                                     <td>
-                                        {{ $dokumen->versions->count() }}
-                                        versi
+                                        @php
+                                            // Relasi versions sudah diurutkan dari versi terbaru.
+                                            $versiTerakhir = $dokumen->versions->first();
+                                        @endphp
+
+                                        @if ($versiTerakhir)
+                                            <strong>Versi {{ $versiTerakhir->version }}</strong><br>
+                                            <small>{{ $versiTerakhir->nama_file }}</small>
+                                        @else
+                                            <span class="text-muted">Belum ada versi</span>
+                                        @endif
                                     </td>
 
                                     <td>
@@ -158,6 +179,12 @@
                                             class="btn btn-warning btn-sm" title="Edit dokumen">
                                             <i class="fas fa-edit"></i>
                                             Edit
+                                        </a>
+
+                                        <a href="{{ route('pegawais.dokumen.versions.create', [$pegawai, $dokumen]) }}"
+                                            class="btn btn-primary btn-sm" title="Upload versi dokumen">
+                                            <i class="fas fa-upload"></i>
+                                            Upload Versi
                                         </a>
 
                                     </td>

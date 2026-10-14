@@ -12,18 +12,39 @@ class StoreDokumenVersionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * Memastikan file versi tersedia, bertipe dokumen yang didukung,
+     * dan tidak melebihi batas ukuran 10 MB.
      */
     public function rules(): array
     {
         return [
-            //
+            'file' => [
+                'required',
+                'file',
+                'mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx',
+                'max:10240',//10 MB
+            ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'file.required' => 'File dokumen wajib dipilih.',
+            'file.file' => 'File yang dipilih tidak valid.',
+            'file.mimes' => 'File harus berformat PDF, gambar, Word, atau Excel.',
+            'file.max' => 'Ukuran file maksimal 10MB.',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return[
+            'file' => 'File Dokumen'
         ];
     }
 }
