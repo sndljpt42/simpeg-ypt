@@ -139,7 +139,9 @@ class DokumenController extends Controller
         }
 
         return redirect()
-            ->route('pegawais.dokumen.index',$pegawai
+            ->route(
+                'pegawais.dokumen.index',
+                $pegawai
             )->with(
                 'success',
                 "Versi {$version->version} untuk dokumen \"{$dokumen->nama}\" berhasil diunggah."
@@ -154,6 +156,21 @@ class DokumenController extends Controller
         return view('pegawais.dokumen.versions.create', [
             'pegawai' => $pegawai,
             'dokumen' => $dokumen
+        ]);
+    }
+
+    public function versionHistory(Pegawai $pegawai, Dokumen $dokumen): View
+    {
+        //memestikan dokumen memang milik pegawai tersebut
+        abort_unless($dokumen->pegawai_id === $pegawai->id, 404);
+
+        //urutkan versi dari yang terbaru
+        $versions = $dokumen->versions()->orderByDesc('version')->get();
+
+        return view('pegawais.dokumen.versions.index', [
+            'pegawai' => $pegawai,
+            'dokumen' => $dokumen,
+            'versions' => $versions,
         ]);
     }
 }

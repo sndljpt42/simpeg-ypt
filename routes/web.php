@@ -104,13 +104,23 @@ Route::middleware(['auth'])->group(function () {
     )->name('pegawais.dokumen.update');
 
     // Menyimpan versi baru dari sebuah dokumen.
-    Route::post('pegawais/{pegawai}/dokumen/{dokumen}/versions',
-    [DokumenController::class, 'StoreVersion'])->name('pegawais.dokumen.versions.store');
+    Route::post(
+        'pegawais/{pegawai}/dokumen/{dokumen}/versions',
+        [DokumenController::class, 'StoreVersion']
+    )->name('pegawais.dokumen.versions.store');
 
     //tampil form unggah version dokumen
-    Route::get('pegawais/{pegawai}/dokumen/{dokumen}/versions/create',
-    [DokumenController::class, 'createVersion'])->name('pegawais.dokumen.versions.create');
+    Route::get(
+        'pegawais/{pegawai}/dokumen/{dokumen}/versions/create',
+        [DokumenController::class, 'createVersion']
+    )->name('pegawais.dokumen.versions.create');
 
+    // Menampilkan seluruh versi dari sebuah dokumen.
+    Route::get(
+        'pegawais/{pegawai}/dokumen/{dokumen}/versions',
+        [DokumenController::class, 'versionHistory']
+    )->name('pegawais.dokumen.versions.index');
+    
     Route::resource('unit-kerja', UnitKerjaController::class);
 
     Route::resource('program-studi', ProgramStudiController::class);

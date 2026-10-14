@@ -187,6 +187,12 @@
                                             Upload Versi
                                         </a>
 
+                                        <a href="{{ route('pegawais.dokumen.versions.index', [$pegawai, $dokumen]) }}"
+                                            class="btn btn-info btn-sm" title="Lihat riwayat versi">
+                                            <i class="fas fa-history"></i>
+                                            Riwayat
+                                        </a>
+
                                     </td>
 
                                 </tr>
