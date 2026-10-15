@@ -120,7 +120,13 @@ Route::middleware(['auth'])->group(function () {
         'pegawais/{pegawai}/dokumen/{dokumen}/versions',
         [DokumenController::class, 'versionHistory']
     )->name('pegawais.dokumen.versions.index');
-    
+
+    // Mengunduh file dari versi dokumen yang dipilih.
+    Route::get(
+        'pegawais/{pegawai}/dokumen/{dokumen}/versions/{version}/download',
+        [DokumenController::class, 'downloadVersion']
+    )->name('pegawais.dokumen.versions.download');
+
     Route::resource('unit-kerja', UnitKerjaController::class);
 
     Route::resource('program-studi', ProgramStudiController::class);
