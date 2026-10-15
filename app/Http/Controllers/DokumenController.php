@@ -11,6 +11,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Models\DokumenVersion;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 
 class DokumenController extends Controller
@@ -172,5 +174,29 @@ class DokumenController extends Controller
             'dokumen' => $dokumen,
             'versions' => $versions,
         ]);
+    }
+
+    public function downloadVersion(
+        Pegawai $pegawai,
+        Dokumen $dokumen,
+        DokumenVersion $version
+    ): StreamedResponse {
+        // Pastikan dokumen dimiliki pegawai pada URL.
+        abort_unless($dokumen->pegawai_id === $pegawai->id, 404);
+
+        // Pastikan versi yang diminta merupakan versi dari dokumen tersebut.
+        abort_unless($version->dokumen_id === $dokumen->id, 404);
+
+        // File privat yang sudah hilang tidak dapat diunduh.
+        abort_unless(
+            Storage::disk('local')->exists($version->path),
+            404
+        );
+
+        // Kirim file dari disk privat dengan nama file yang dikenal pengguna.
+        return Storage::disk('local')->download(
+            $version->path,
+            $version->nama_file
+        );
     }
 }

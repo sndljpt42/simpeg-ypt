@@ -26,7 +26,7 @@ class StoreDokumenVersionRequest extends FormRequest
                 'required',
                 'file',
                 'mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx',
-                'max:10240',//10 MB
+                'max:3072',//3 MB
             ],
         ];
     }
@@ -37,7 +37,7 @@ class StoreDokumenVersionRequest extends FormRequest
             'file.required' => 'File dokumen wajib dipilih.',
             'file.file' => 'File yang dipilih tidak valid.',
             'file.mimes' => 'File harus berformat PDF, gambar, Word, atau Excel.',
-            'file.max' => 'Ukuran file maksimal 10MB.',
+            'file.max' => 'Ukuran file maksimal 3MB.',
         ];
     }
 

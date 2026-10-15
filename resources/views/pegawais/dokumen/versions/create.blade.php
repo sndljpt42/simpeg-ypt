@@ -59,7 +59,7 @@
                     @enderror
 
                     <small class="form-text text-muted">
-                        Format PDF, gambar, Word, atau Excel; ukuran maksimal 10 MB.
+                        Format PDF, gambar, Word, atau Excel; ukuran maksimal 3 MB.
                     </small>
                 </div>
 

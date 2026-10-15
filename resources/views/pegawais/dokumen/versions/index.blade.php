@@ -120,6 +120,7 @@
                                 <th width="130">Ukuran</th>
                                 <th width="180">Tanggal Unggah</th>
                                 <th width="120">Status</th>
+                                <th width="120">Aksi</th>
                             </tr>
                         </thead>
 
@@ -153,6 +154,16 @@
                                             <span class="badge badge-secondary">Arsip</span>
                                         @endif
                                     </td>
+
+                                    <td>
+                                        <a href="{{ route('pegawais.dokumen.versions.download', [$pegawai, $dokumen, $version]) }}"
+                                            class="btn btn-outline-primary btn-sm" title="Unduh versi ini">
+                                            <i class="fas fa-download"></i>
+                                            Unduh
+                                        </a>
+                                    </td>
+
+
                                 </tr>
                             @endforeach
                         </tbody>
