@@ -127,6 +127,10 @@ Route::middleware(['auth'])->group(function () {
         [DokumenController::class, 'downloadVersion']
     )->name('pegawais.dokumen.versions.download');
 
+    //melihat preview dokumen
+    Route::get('pegawais/{pegawai}/dokumen/{dokumen}/versions/{version}/preview',
+    [DokumenController::class, 'previewVersion'])->name('pegawais.dokumen.versions.preview');
+
     Route::resource('unit-kerja', UnitKerjaController::class);
 
     Route::resource('program-studi', ProgramStudiController::class);

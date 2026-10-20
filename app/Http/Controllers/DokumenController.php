@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Models\DokumenVersion;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 
 class DokumenController extends Controller
@@ -180,23 +179,76 @@ class DokumenController extends Controller
         Pegawai $pegawai,
         Dokumen $dokumen,
         DokumenVersion $version
-    ): StreamedResponse {
-        // Pastikan dokumen dimiliki pegawai pada URL.
-        abort_unless($dokumen->pegawai_id === $pegawai->id, 404);
-
-        // Pastikan versi yang diminta merupakan versi dari dokumen tersebut.
-        abort_unless($version->dokumen_id === $dokumen->id, 404);
-
-        // File privat yang sudah hilang tidak dapat diunduh.
+    ): \Symfony\Component\HttpFoundation\BinaryFileResponse {
+        // Pastikan dokumen milik pegawai pada URL.
         abort_unless(
-            Storage::disk('local')->exists($version->path),
+            (int) $dokumen->pegawai_id === (int) $pegawai->id,
             404
         );
 
-        // Kirim file dari disk privat dengan nama file yang dikenal pengguna.
-        return Storage::disk('local')->download(
-            $version->path,
+        // Pastikan versi milik dokumen pada URL.
+        abort_unless(
+            (int) $version->dokumen_id === (int) $dokumen->id,
+            404
+        );
+
+        $disk = Storage::disk('local');
+
+        // Pastikan file masih ada di private storage.
+        abort_unless($disk->exists($version->path), 404);
+
+        // Unduh file dengan nama aslinya.
+        return response()->download(
+            $disk->path($version->path),
             $version->nama_file
+        );
+    }
+
+    public function previewVersion(
+        Pegawai $pegawai,
+        Dokumen $dokumen,
+        DokumenVersion $version
+    ): \Symfony\Component\HttpFoundation\BinaryFileResponse {
+        // Pastikan dokumen merupakan milik pegawai pada URL.
+        abort_unless(
+            (int) $dokumen->pegawai_id === (int) $pegawai->id,
+            404
+        );
+
+        // Pastikan versi tersebut milik dokumen pada URL.
+        abort_unless(
+            (int) $version->dokumen_id === (int) $dokumen->id,
+            404
+        );
+
+        $disk = Storage::disk('local');
+
+        // Hentikan proses jika file tidak ada di private storage.
+        abort_unless($disk->exists($version->path), 404);
+
+        // Periksa MIME aktual file yang tersimpan.
+        $mimeType = mime_content_type($disk->path($version->path));
+
+        $allowedMimeTypes = [
+            'application/pdf',
+            'image/jpeg',
+            'image/png',
+        ];
+
+        abort_unless(
+            in_array($mimeType, $allowedMimeTypes, true),
+            404
+        );
+
+        // Sajikan file secara inline agar browser menampilkannya.
+        return response()->file(
+            $disk->path($version->path),
+            [
+                'Content-Type' => $mimeType,
+                'Content-Disposition' => 'inline; filename="' .
+                    addslashes($version->nama_file) . '"',
+                'X-Content-Type-Options' => 'nosniff',
+            ]
         );
     }
 }

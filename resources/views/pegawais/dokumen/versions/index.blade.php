@@ -163,6 +163,26 @@
                                         </a>
                                     </td>
 
+                                    <td>
+                                        @php
+                                            // Tampilkan tombol hanya untuk format yang didukung pratinjau.
+                                            $extension = strtolower(pathinfo($version->nama_file, PATHINFO_EXTENSION));
+                                            $canPreview = in_array($extension, ['pdf', 'jpg', 'jpeg', 'png'], true);
+                                        @endphp
+
+                                        @if ($canPreview)
+                                            <a href="{{ route('pegawais.dokumen.versions.preview', [
+                                                'pegawai' => $pegawai->id,
+                                                'dokumen' => $dokumen->id,
+                                                'version' => $version->id,
+                                            ]) }}"
+                                                class="btn btn-sm btn-info" target="_blank" rel="noopener"
+                                                title="Pratinjau file">
+                                                <i class="fas fa-eye"></i> Preview
+                                            </a>
+                                        @endif
+                                    </td>
+
 
                                 </tr>
                             @endforeach

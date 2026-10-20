@@ -52,14 +52,14 @@
 
                     <input type="file" name="file" id="file"
                         class="form-control-file @error('file') is-invalid @enderror"
-                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" required>
+                        accept=".pdf,.jpg,.jpeg,.png" required>
 
                     @error('file')
                         <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
 
                     <small class="form-text text-muted">
-                        Format PDF, gambar, Word, atau Excel; ukuran maksimal 3 MB.
+                        Format PDF, JPG, atau PNG; ukuran maksimal 3 MB.
                     </small>
                 </div>
 
