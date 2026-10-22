@@ -96,7 +96,15 @@
             </div>
         </div>
     </div>
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
 
+            <button type="button" class="close" data-dismiss="alert" aria-label="Tutup">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Daftar Versi</h3>
@@ -157,13 +165,11 @@
 
                                     <td>
                                         <a href="{{ route('pegawais.dokumen.versions.download', [$pegawai, $dokumen, $version]) }}"
-                                            class="btn btn-outline-primary btn-sm" title="Unduh versi ini">
+                                            class="btn btn-outline-primary btn-sm mb-1" title="Unduh versi ini">
                                             <i class="fas fa-download"></i>
                                             Unduh
                                         </a>
-                                    </td>
 
-                                    <td>
                                         @php
                                             // Tampilkan tombol hanya untuk format yang didukung pratinjau.
                                             $extension = strtolower(pathinfo($version->nama_file, PATHINFO_EXTENSION));
@@ -176,14 +182,28 @@
                                                 'dokumen' => $dokumen->id,
                                                 'version' => $version->id,
                                             ]) }}"
-                                                class="btn btn-sm btn-info" target="_blank" rel="noopener"
+                                                class="btn btn-sm btn-info mb-1" target="_blank" rel="noopener"
                                                 title="Pratinjau file">
                                                 <i class="fas fa-eye"></i> Preview
                                             </a>
                                         @endif
+
+                                        <form
+                                            action="{{ route('pegawais.dokumen.versions.destroy', [
+                                                'pegawai' => $pegawai->id,
+                                                'dokumen' => $dokumen->id,
+                                                'version' => $version->id,
+                                            ]) }}"
+                                            method="POST" class="d-inline mb-1"
+                                            onsubmit="return confirm('Hapus versi ini beserta file-nya?');">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus versi">
+                                                <i class="fas fa-trash"></i> Hapus
+                                            </button>
+                                        </form>
                                     </td>
-
-
                                 </tr>
                             @endforeach
                         </tbody>

@@ -23,6 +23,17 @@
         </div>
     @endif
 
+    @if (session('error'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle mr-1"></i>
+            {{ session('error') }}
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Tutup">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     {{-- Informasi Pegawai --}}
     <div class="card">
 
@@ -176,22 +187,35 @@
 
                                         {{-- Membuka form untuk mengubah metadata dokumen. --}}
                                         <a href="{{ route('pegawais.dokumen.edit', [$pegawai, $dokumen]) }}"
-                                            class="btn btn-warning btn-sm" title="Edit dokumen">
+                                            class="btn btn-warning btn-sm mb-1" title="Edit dokumen">
                                             <i class="fas fa-edit"></i>
                                             Edit
                                         </a>
 
                                         <a href="{{ route('pegawais.dokumen.versions.create', [$pegawai, $dokumen]) }}"
-                                            class="btn btn-primary btn-sm" title="Upload versi dokumen">
+                                            class="btn btn-primary btn-sm mb-1" title="Upload versi dokumen">
                                             <i class="fas fa-upload"></i>
                                             Upload Versi
                                         </a>
 
                                         <a href="{{ route('pegawais.dokumen.versions.index', [$pegawai, $dokumen]) }}"
-                                            class="btn btn-info btn-sm" title="Lihat riwayat versi">
+                                            class="btn btn-info btn-sm mb-1" title="Lihat riwayat versi">
                                             <i class="fas fa-history"></i>
                                             Riwayat
                                         </a>
+
+                                        <form action="{{ route('pegawais.dokumen.destroy', [$pegawai, $dokumen]) }}"
+                                            method="POST" class="d-inline"
+                                            onsubmit="return confirm('Hapus repository dokumen ini? Repository yang masih memiliki versi file tidak dapat dihapus.');">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="btn btn-danger btn-sm mb-1"
+                                                title="Hapus repository">
+                                                <i class="fas fa-trash"></i>
+                                                Hapus
+                                            </button>
+                                        </form>
 
                                     </td>
 

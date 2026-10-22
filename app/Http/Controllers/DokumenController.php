@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Models\DokumenVersion;
+use Illuminate\Support\Facades\Redirect;
 use Throwable;
 
 class DokumenController extends Controller
@@ -86,6 +87,34 @@ class DokumenController extends Controller
                 'success',
                 'Dokumen "' . $dokumen->nama . '" berhasil diperbarui.'
             );
+    }
+
+    public function destroy(Pegawai $pegawai, Dokumen $dokumen)
+    {
+        // Memastikan dokumen yang dihapus memang milik pegawai tersebut.
+        abort_unless(
+            (int) $dokumen->pegawai_id === (int) $pegawai->id,
+            404
+        );
+
+        //repository tidak boleh dihapus selama masih memiliki versi file
+        if ($dokumen->versions()->exists()) {
+            return redirect()
+                ->route('pegawais.dokumen.index', $pegawai)
+                ->with(
+                    'error',
+                    'Repository "' . $dokumen->nama . '" belum dapat dihapus karena masih memiliki versi file. Hapus seluruh versinya terlebih dahulu.'
+                );
+        }
+
+        $namaDokumen = $dokumen->nama;
+
+        //hanya metadata repository yang dihapus karena tidak ada versi file
+        $dokumen->delete();
+
+        return redirect()
+            ->route('pegawais.dokumen.index', $pegawai)
+            ->with('success', 'Repository "' . $namaDokumen . '" berhasil dihapus.');
     }
 
     public function storeVersion(
@@ -250,5 +279,32 @@ class DokumenController extends Controller
                 'X-Content-Type-Options' => 'nosniff',
             ]
         );
+    }
+
+    public function destroyVersion(Pegawai $pegawai, Dokumen $dokumen, DokumenVersion $version)
+    {
+        //pastikan dokumen milik pegawai berdasarkan route/url
+        abort_unless((int) $dokumen->pegawai_id === (int) $pegawai->id, 404);
+
+        //cegah versi dari dokumen lain dihapus melalui url ini
+        abort_unless((int) $version->dokumen_id === (int) $dokumen->id, 404);
+
+        $disk = Storage::disk('local');
+        $path = $version->path;
+
+        //hapus file dari storage
+        if ($disk->exists($path)) {
+            $disk->delete($path);
+        }
+
+        //hapus catatan versi dari database
+        $version->delete();
+
+        return redirect()
+            ->route('pegawais.dokumen.versions.index', [
+                'pegawai' => $pegawai->id,
+                'dokumen' => $dokumen->id,
+            ])
+            ->with('success', "Versi {$version->version} berhasil dihapus.");
     }
 }

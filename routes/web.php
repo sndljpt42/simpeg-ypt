@@ -128,8 +128,18 @@ Route::middleware(['auth'])->group(function () {
     )->name('pegawais.dokumen.versions.download');
 
     //melihat preview dokumen
-    Route::get('pegawais/{pegawai}/dokumen/{dokumen}/versions/{version}/preview',
-    [DokumenController::class, 'previewVersion'])->name('pegawais.dokumen.versions.preview');
+    Route::get(
+        'pegawais/{pegawai}/dokumen/{dokumen}/versions/{version}/preview',
+        [DokumenController::class, 'previewVersion']
+    )->name('pegawais.dokumen.versions.preview');
+
+    //delete versi dokumen
+    Route::delete('pegawais/{pegawai}/dokumen/{dokumen}/versions/{version}', [DokumenController::class, 'destroyVersion'])
+        ->name('pegawais.dokumen.versions.destroy');
+
+    // delete repositori dokumen
+    Route::delete('pegawais/{pegawai}/dokumen/{dokumen}', [DokumenController::class, 'destroy'])
+        ->name('pegawais.dokumen.destroy');
 
     Route::resource('unit-kerja', UnitKerjaController::class);
 
