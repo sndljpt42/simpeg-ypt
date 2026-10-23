@@ -12,8 +12,8 @@ class UpdateDokumenRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Akses route sudah dilindungi oleh middleware auth.
-        return true;
+        // Periksa izin mengubah data pegawai yang terhubung ke dokumen ini.
+        return $this->user()?->can('update', $this->route('pegawai')) ?? false;
     }
 
     /**

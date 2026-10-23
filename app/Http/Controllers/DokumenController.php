@@ -13,12 +13,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Models\DokumenVersion;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Gate;
+// Helper untuk menyusun nilai header Content-Disposition dengan aman.
+use Symfony\Component\HttpFoundation\HeaderUtils;
+// Menyediakan konstanta DISPOSITION_INLINE untuk preview di browser.
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Throwable;
 
 class DokumenController extends Controller
 {
     public function index(Pegawai $pegawai): View
     {
+        Gate::authorize('view', $pegawai);
+
         //memastikan query memang mengambil dokumen milik pegawai yang sedang dibuka serta versinya
         $dokumens = $pegawai->dokumens()
             ->with('versions')
@@ -33,6 +40,8 @@ class DokumenController extends Controller
 
     public function create(Pegawai $pegawai): View
     {
+        Gate::authorize('create', Pegawai::class);
+
         //membuat objek kosong agar form yang sama bisa digunkan untuk create
         $dokumen = new Dokumen();
         //menampilkan form untuk membuat dokumen baru milik pegawai tsb.
@@ -41,6 +50,7 @@ class DokumenController extends Controller
 
     public function store(StoreDokumenRequest $request, Pegawai $pegawai)
     {
+
         //memangil data yang lolos validasi
         $data = $request->validated();
 
@@ -56,6 +66,7 @@ class DokumenController extends Controller
 
     public function edit(Pegawai $pegawai, Dokumen $dokumen): View
     {
+        Gate::authorize('update', $pegawai);
         //memastikan dokumen memang milik pegawai yang sedang dibuka
         abort_unless($dokumen->pegawai_id === $pegawai->id, 404);
         return view('pegawais.dokumen.edit', [
@@ -64,11 +75,8 @@ class DokumenController extends Controller
         ]);
     }
 
-    public function update(
-        UpdateDokumenRequest $request,
-        Pegawai $pegawai,
-        Dokumen $dokumen
-    ) {
+    public function update(UpdateDokumenRequest $request, Pegawai $pegawai, Dokumen $dokumen)
+    {
         // Memastikan dokumen yang diedit memang milik pegawai tersebut.
         abort_unless(
             $dokumen->pegawai_id === $pegawai->id,
@@ -91,6 +99,7 @@ class DokumenController extends Controller
 
     public function destroy(Pegawai $pegawai, Dokumen $dokumen)
     {
+        Gate::authorize('delete', $pegawai);
         // Memastikan dokumen yang dihapus memang milik pegawai tersebut.
         abort_unless(
             (int) $dokumen->pegawai_id === (int) $pegawai->id,
@@ -180,6 +189,7 @@ class DokumenController extends Controller
 
     public function createVersion(Pegawai $pegawai, Dokumen $dokumen): View
     {
+        Gate::authorize('update', $pegawai);
         //memastikan dokumen milik pegawai berdasarkan ruote/URL
         abort_unless($dokumen->pegawai_id === $pegawai->id, 404);
 
@@ -191,6 +201,7 @@ class DokumenController extends Controller
 
     public function versionHistory(Pegawai $pegawai, Dokumen $dokumen): View
     {
+        Gate::authorize('view', $pegawai);
         //memestikan dokumen memang milik pegawai tersebut
         abort_unless($dokumen->pegawai_id === $pegawai->id, 404);
 
@@ -209,6 +220,8 @@ class DokumenController extends Controller
         Dokumen $dokumen,
         DokumenVersion $version
     ): \Symfony\Component\HttpFoundation\BinaryFileResponse {
+
+        Gate::authorize('view', $pegawai);
         // Pastikan dokumen milik pegawai pada URL.
         abort_unless(
             (int) $dokumen->pegawai_id === (int) $pegawai->id,
@@ -238,6 +251,8 @@ class DokumenController extends Controller
         Dokumen $dokumen,
         DokumenVersion $version
     ): \Symfony\Component\HttpFoundation\BinaryFileResponse {
+
+        Gate::authorize('view', $pegawai);
         // Pastikan dokumen merupakan milik pegawai pada URL.
         abort_unless(
             (int) $dokumen->pegawai_id === (int) $pegawai->id,
@@ -274,8 +289,20 @@ class DokumenController extends Controller
             $disk->path($version->path),
             [
                 'Content-Type' => $mimeType,
-                'Content-Disposition' => 'inline; filename="' .
-                    addslashes($version->nama_file) . '"',
+                // Buat header agar browser menampilkan file secara inline.
+                'Content-Disposition' => HeaderUtils::makeDisposition(
+                    //pilih mode inline unutk membuka file pada tab
+                    ResponseHeaderBag::DISPOSITION_INLINE,
+                    $version->nama_file,
+
+                    //Sediakan nama ASCII sederhana sebgai fallback.
+
+                    match ($mimeType) {
+                        'application/pdf' => 'dokumen.pdf',
+                        'image/jpeg' => 'dokumen.jpg',
+                        'image/png' => 'dokumen.png',
+                    }
+                ),
                 'X-Content-Type-Options' => 'nosniff',
             ]
         );
@@ -283,6 +310,8 @@ class DokumenController extends Controller
 
     public function destroyVersion(Pegawai $pegawai, Dokumen $dokumen, DokumenVersion $version)
     {
+
+        Gate::authorize('delete', $pegawai);
         //pastikan dokumen milik pegawai berdasarkan route/url
         abort_unless((int) $dokumen->pegawai_id === (int) $pegawai->id, 404);
 
@@ -292,9 +321,16 @@ class DokumenController extends Controller
         $disk = Storage::disk('local');
         $path = $version->path;
 
-        //hapus file dari storage
-        if ($disk->exists($path)) {
-            $disk->delete($path);
+        //cek file masih ada di private storage atau tidak
+        if ($disk->exists($path) && ! $disk->delete($path)) {
+            //hentikan proses jika file ada tetapi gagal dihapus
+            return redirect()
+                ->route('pegawais.dokumen.versions.index', [
+                    'pegawai' => $pegawai->id,
+                    'dokumen' => $dokumen->id,
+                ])
+
+                ->with('error', 'File gagal dihapus. Catatan versi tetap dipertahankan');
         }
 
         //hapus catatan versi dari database

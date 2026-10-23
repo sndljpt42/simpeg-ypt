@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Pegawai;
 
 class StoreDokumenRequest extends FormRequest
 {
@@ -12,8 +13,8 @@ class StoreDokumenRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Akses route sudah dilindungi oleh middleware auth.
-        return true;
+        //hanya role yang diizinkan policy boleh membuat repository
+        return $this->user()?->can('create', Pegawai::class) ?? false;
     }
 
     /**

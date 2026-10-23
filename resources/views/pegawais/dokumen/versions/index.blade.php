@@ -105,6 +105,17 @@
             </button>
         </div>
     @endif
+
+    @if (session('error'))
+        {{-- Tampilkan pesan error menggunakan gaya peringatan Bootstrap. --}}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Tutup">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Daftar Versi</h3>

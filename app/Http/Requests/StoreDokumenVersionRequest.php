@@ -12,12 +12,13 @@ class StoreDokumenVersionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        // Upload versi dianggap perubahan pada dokumen milik pegawai ini.
+        return $this->user()?->can('update', $this->route('pegawai')) ?? false;
     }
 
     /**
      * Memastikan file versi tersedia, bertipe dokumen yang didukung,
-     * dan tidak melebihi batas ukuran 10 MB.
+     * dan tidak melebihi batas ukuran 3 MB.
      */
     public function rules(): array
     {
@@ -26,7 +27,7 @@ class StoreDokumenVersionRequest extends FormRequest
                 'required',
                 'file',
                 'mimes:pdf,jpg,jpeg,png',
-                'max:3072',//3 MB
+                'max:3072', //3 MB
             ],
         ];
     }
@@ -43,7 +44,7 @@ class StoreDokumenVersionRequest extends FormRequest
 
     public function attributes(): array
     {
-        return[
+        return [
             'file' => 'File Dokumen'
         ];
     }
